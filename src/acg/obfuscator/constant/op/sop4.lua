@@ -1,0 +1,1 @@
+strByte = strByte - (encKey4);

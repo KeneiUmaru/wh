@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.3.1/nord.min.css" crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.19.0/index.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.1.1/nord-dark.css" crossorigin="anonymous" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/logo.png">
+    <title>Secure Lua | #1 Lua Whitelist Service</title>
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+</head>
+<body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-172W8028KH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-172W8028KH');
+    </script>
+
+    <style>
+        body {
+            background: var(--n-color-surface);
+            margin: 0;
+        }
+
+        #info {
+            width: 65%;
+        }
+
+        nord-stack {
+            width: 50%;
+        }
+
+        .icon {
+            position: relative;
+            bottom: -3px;
+        }
+
+        .faq {
+            appearance: none;
+            box-sizing: border-box;
+            border: 0;
+        }
+
+        .dashboard {
+            outline: 2px dotted rgb(255, 255, 255);
+            outline-offset: 5px;    
+            cursor: pointer;
+        }
+
+        .imgselector {
+            outline: none;
+            width: 12px;
+            height: 5px;
+            border-radius: 100px;
+            margin-left: 4px;
+            border: none;
+        }
+
+        .imgselector:hover {
+            background-color: rgb(39, 38, 38);
+            cursor: pointer;
+        }
+
+        .imgselector:focus {
+            background-color: rgb(39, 38, 38);
+        }
+
+        .footer-info {
+            color: var(--n-color-text-weaker);
+            font-size: var(--n-font-size-s);
+            min-width: calc(var(--n-space-xxl) * 2);
+            flex: 1;
+        }
+    </style>
+    
+    <style>
+        @media screen and (max-width: 600px) {
+            nord-stack, #info, .dashboard {
+                width: 80%;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .imgselector {
+                width: 40px;
+                margin-bottom: 40px;
+            }
+        }
+
+        @media screen and (max-width: 375px) {
+            .payment-options {
+                display: contents;
+            }
+
+            .payment-option {
+                margin-bottom: var(--n-space-m);
+            }
+        }
+    </style>
+
+    
+    <nord-header>
+        <h1 class="n-typescale-l">Secure Lua</h1>
+        <img src="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto,h_50/mwgwjgjq0hhhy3nsobhc" alt="" srcset="">
+        <nord-button href="/dashboard/register" slot="end">Register</nord-button>
+        <nord-button href="/dashboard/login" variant="primary" slot="end">Login</nord-button>
+    </nord-header>
+
+    <nord-empty-state class="n-gap-m">
+        <h2>Cheap, Secure, and Effective.</h2>
+        <p>We believe Lua authentication should be simple and affordable.</p>
+
+        <nord-stack justify-content="center" direction="horizontal" class="n-margin-be-m">
+            <nord-card style="text-align: center;">
+                <h2 slot="header"><nord-icon name="generic-module" slot="start" class="icon"></nord-icon> Paste 'n Go</h2>
+                No source needed—just paste our loader at the top of your script and you're good to go!
+            </nord-card>
+            <nord-card style="text-align: center;">
+                <h2 slot="header"><nord-icon name="user-block" slot="start" class="icon"></nord-icon> Linkvertise Rewards</h2>
+                Earn passive income easily—share your link, and users get a random license key after completing the required actions, all for free!</nord-card>
+            <nord-card style="text-align: center;">
+                <h2 slot="header"><nord-icon name="navigation-reports" slot="start" class="icon"></nord-icon> Lightning Speed</h2>
+                Our loader is thoroughly tested and optimized for all platforms, ensuring zero noticeable performance overhead.
+            </nord-card>
+        </nord-stack>
+        <nord-stack justify-content="center" direction="horizontal">
+            <nord-card style="text-align: center;">
+                <h2 slot="header"><nord-icon name="file-script" slot="start" class="icon"></nord-icon>  Top Security</h2>
+                <p class="n-reset">We use effective methods to prevent malicious actors. Each loader is uniquely and randomly generated, ensuring script entropy.</p>
+            </nord-card>
+            <nord-card style="text-align: center;">
+                <h2 slot="header"><nord-icon name="interface-password" slot="start" class="icon"></nord-icon>  Mass Generate Licenses</h2>
+                <p class="n-reset">Eliminate the hassle of whitelisting users—automatically generate redeemable license keys, exportable in JSON or TXT format.</p>
+            </nord-card>
+            <nord-card style="text-align: center;">
+                <h2 slot="header"><nord-icon name="generic-chip" slot="start" class="icon"></nord-icon>  Runtime Variables</h2>
+                <p class="n-reset">Reclaim control with our runtime variables, giving you access to user-specific data like Discord ID and HWID directly from your script.</p>
+            </nord-card>
+        </nord-stack>
+    </nord-empty-state>
+
+    <nord-divider direction="horizontal"></nord-divider>
+
+    <nord-empty-state>
+        <h3>Our Pricing</h3>
+        <nord-badge class="n-padding-be-s" variant="success">Automatic Payments<nord-badge class="" variant="info">Crypto & Card</nord-badge> </nord-badge> 
+        
+        <div class="n-grid-3 n-margin-be-l payment-options">
+            <nord-card class="payment-option">
+                <h2 slot="header"><nord-icon name="interface-incomplete-small" slot="start" class="icon"></nord-icon> Starter</h2>
+                <p style="font-size: 12px;font-style: italic;text-align: center;margin: 0px 0px 9px; display: none;">"Ideal for users starting from the bottom--"</p>
+                <dl class="n-dl">
+                    <dt>API Access</dt>
+                    <dd>✓</dd>
+                    <dt>Security Logs</dt>
+                    <dd>✓</dd>
+                    <dt>Server Storage</dt>
+                    <dd>__</dd>
+                    <dt>Script Upload</dt>
+                    <dd>__</dd>
+                    <dt>Support Tickets</dt>
+                    <dd>__</dd>
+                    <dt>Rewards</dt>
+                    <dd>__</dd>
+                    <dt>Users</dt>
+                    <dd>15</dd>
+                    <dt>Projects</dt>
+                    <dd>1</dd>
+                    <dt>Price</dt>
+                    <dd>Free</dd>
+                </dl>
+            </nord-card>
+            <nord-card class="payment-option">
+                <h2 slot="header"><nord-icon name="interface-star" slot="start" class="icon"></nord-icon> Pro</h2>
+                <dl class="n-dl" style="text-align: left;">
+                    <dt>API Access</dt>
+                    <dd>✓</dd>
+                    <dt>Security Logs</dt>
+                    <dd>✓</dd>
+                    <dt>Server Storage</dt>
+                    <dd>✓</dd>
+                    <dt>Script Upload</dt>
+                    <dd>✓</dd>
+                    <dt>Support Tickets</dt>
+                    <dd>✓</dd>
+                    <dt>Rewards</dt>
+                    <dd>✓</dd>
+                    <dt>Users</dt>
+                    <dd>1,500</dd>
+                    <dt>Projects</dt>
+                    <dd>25</dd>
+                    <dt>Price</dt>
+                    <dd>$7.45<d class="n-typescale-xs">/month</d></dd>
+                </dl>
+            </nord-card>
+            <nord-card class="payment-option">
+                <h2 slot="header"><nord-icon name="interface-star-filled" slot="start" class="icon"></nord-icon> Advanced</h2>
+                <dl class="n-dl" style="text-align: left;">
+                    <dt>API Access</dt>
+                    <dd>✓</dd>
+                    <dt>Security Logs</dt>
+                    <dd>✓</dd>
+                    <dt>Server Storage</dt>
+                    <dd>✓</dd>
+                    <dt>Script Upload</dt>
+                    <dd>✓</dd>
+                    <dt>Support Tickets</dt>
+                    <dd>✓</dd>
+                    <dt>Rewards</dt>
+                    <dd>✓</dd>
+                    <dt>Users</dt>
+                    <dd>20,000</dd>
+                    <dt>Projects</dt>
+                    <dd>100</dd>
+                    <dt>Price</dt>
+                    <dd>$13.45<d class="n-typescale-xs">/month</d> <nord-badge variant="warning" slot="end">Best Value</nord-badge></dd>
+                </dl>
+            </nord-card>
+        </div>
+        <nord-button href="/dashboard/register" size="s" variant="primary">Get Started</nord-button>
+    </nord-empty-state>
+
+    <nord-divider direction="horizontal"></nord-divider>
+        
+    <nord-empty-state>
+        <h4 id="info" class="n-padding-be-m n-typescale-s">Effortlessly manage and track your projects from start to finish</h4>
+        <nord-stack justify-content="center" direction="horizontal">
+            <nord-icon style="width: 20px; padding-bottom: 20px; display: none;" class="imgselector" id="buttonLeft"  onclick="ButtonLeft()" name="arrow-left"></nord-icon>
+            <img class="dashboard" id="currentImg" onclick="EnlargeImage()" src="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto,h_500/d94ibz6i8kzim0po1lzn" alt="" srcset="">
+            <nord-icon style="width: 20px; padding-bottom: 20px" class="imgselector" onclick="ButtonRight()" id="buttonRight" name="arrow-right"></nord-icon>
+        </nord-stack>
+    </nord-empty-state>
+
+    <nord-modal id="enlargeImageModal" size="l">
+        <h4 id="enlargedImageTitle" slot="header"></h4>
+        <img style="width: 100%;" id="enlargedImage" src="" alt="" srcset="">
+    </nord-modal>
+
+    <nord-divider direction="horizontal"></nord-divider>
+
+    <nord-empty-state class="n-padding-bs-s">
+        <h3 class="n-reset">Actively used by thousands</h3>      
+        <p class="n-margin-bs-s n-reset">Join them by securing your scripts with Secure Lua</p>
+        <section class="n-reset n-grid-3">
+            <div>
+                <h3>Monthly Executions <nord-icon class="icon" name="generic-port" slot="end"></nord-icon></h3>
+                <p class="n-margin-bs-s" id="ExecutionCount">100,000+</p>
+            </div>
+            <div>
+                <h3>Active Users <nord-icon class="icon" slot="end" name="user-multiple"></nord-icon></h3>
+                <p class="n-margin-bs-s" id="UserCount">3304+</p>
+            </div>
+            <div>
+                <h3>Active Scripts <nord-icon class="icon" slot="end" name="file-script"></nord-icon></h3>
+                <p class="n-margin-bs-s" id="ScriptCount">262+</p>
+            </div>
+        </section>
+    </nord-empty-state>
+
+    <nord-divider direction="horizontal"></nord-divider>
+
+    <nord-empty-state>
+        <nord-stack justify-content="center" direction="vertical" style="text-align: center;">
+            <h2 class="">FAQ</h2>
+            <nord-card>
+                <h4>What is a Secure Lua?</h4>
+                <nord-card>
+                    <p class="n-reset">Secure Lua involves a security system restricting script execution based on unique hardware identifiers (HWID) and a specific activation key. The HWID ensures that only authorized devices can run the script, while the key adds an extra layer of verification. This method enhances security by preventing unauthorized access and ensuring that only legitimate users can execute the Lua scripts in an application.</p>
+                </nord-card>
+                <h4>What Platforms are Supported?</h4>
+                <nord-card>
+                    <p class="n-reset">Secure Lua currently supports Roblox and various Roblox executors. This allows users to implement whitelisting and security measures specifically for scripting within the Roblox environment.</p>
+                </nord-card>
+                <h4>Do We Log Scripts?</h4>
+                <nord-card>
+                    <p class="n-reset">No, we don't log scripts. Each project receives a unique, randomly generated loader that you can paste on top of any script, ensuring your code remains private and secure.</p>
+                </nord-card>
+                <h4>Do We Need an Obfuscator?</h4>
+                <nord-card>
+                    <p class="n-reset">Yes, an obfuscator is recommended. We keep our service affordable by not obfuscating scripts for you. However, you can easily obfuscate your scripts for just $1 from <a href="https://lura.ph/">lura.ph</a>, which is a cost-effective option in the long run.</p>
+                </nord-card>
+                <h4>What are Rewards?</h4>
+                <nord-card>
+                    <p class="n-reset">Earn passive income effortlessly without charging your users a dime! Simply share your link, and once users complete the required actions, they'll receive a random license key as a reward.</p>
+                </nord-card>
+                <h4>What are Loaders?</h4>
+                <nord-card>
+                    <p class="n-reset">Your loader is a unique Lua script that securely verifies the script_key and HWID, preventing piracy and unauthorized access. Each loader has a unique response, and regenerating it renders old ones useless, ensuring top-tier security. Think of it as a key, sharing it compromises your script's protection.</p>
+                </nord-card>
+                <h4>What is Server Storage?</h4>
+                <nord-card>
+                    <p class="n-reset">Server Storage allows you to easily share and access persistent data between your scripts. By indexing the AUTH_STORAGE variable with a key, you can effortlessly retrieve the corresponding value, streamlining data management and integration. For example, track users' progress or preferences across different script executions.</p>
+                </nord-card>
+            </nord-card>
+        </nord-stack>
+    </nord-empty-state>
+
+    <nord-divider direction="horizontal"></nord-divider>
+
+    <nord-footer>
+        <div class="footer-info">Secure Lua™ - 2025</div>
+        <a href="/tos/">Terms of Service</a>
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="https://discord.gg/cSJwsDAtXx">Discord</a>
+        <a href="/dashboard/register">Register</a>
+    </nord-footer>
+
+    <script>
+        const currentImg = document.getElementById("currentImg");
+        const info = document.getElementById("info");
+        const buttonLeft = document.getElementById("buttonLeft");
+        const buttonRight = document.getElementById("buttonRight");
+        const enlargedImage = document.getElementById("enlargedImage");
+        const enlargeImageModal = document.getElementById("enlargeImageModal");
+        const enlargedImageTitle = document.getElementById("enlargedImageTitle");
+        const ExecutionCount = document.getElementById("ExecutionCount");
+        const UserCount = document.getElementById("UserCount");
+        const ScriptCount = document.getElementById("ScriptCount");
+
+        (async () => {
+            const packet = await fetch("/api/");
+            const { executions, users, projects } = await packet.json();
+            ExecutionCount.textContent = executions.toLocaleString();
+            UserCount.textContent = users.toLocaleString();
+            ScriptCount.textContent = projects.toLocaleString();
+        })();
+        let index = 0;
+
+        const images = [
+            "https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto,h_500/d94ibz6i8kzim0po1lzn",
+            "https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto,h_500/gpioezqq3f6u9a5q73sd",
+            "https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto,h_500/uy2tzbujjyf02okkith2",
+            "https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto,h_500/ddg2kvuhcamknu1zi33n",
+            "https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto,h_500/nyyf6dq3sxb5zofmjz8d"
+        ]
+
+        const description = [
+            "Manage and track your projects effortlessly",
+            "Create licenses in a few simple steps",
+            "Earn passive income with Linkvertise Rewards",
+            "Host and update your scripts in real-time",
+            "Effortlessly create and store persistent data, with easy access via AUTH_STORAGE."
+        ]
+
+        function Handler() {
+            currentImg.src = images[index];
+            info.textContent = description[index];
+        }
+
+        function ButtonLeft() {
+            if (index - 1 >= 0) {
+                if (index - 1 == 0) {
+                    buttonLeft.style.display = "none"
+                }
+                buttonRight.style.display = ""
+                index--;
+                Handler();
+            }
+        }
+
+        function ButtonRight() {
+            if (index + 1 < images.length) {
+                if (index + 1 == images.length - 1) {
+                    buttonRight.style.display = "none"
+                }
+                buttonLeft.style.display = "";
+                index++;
+                Handler();
+            }
+        }
+
+        function EnlargeImage() {
+            enlargedImage.src = currentImg.src;
+            enlargedImageTitle.textContent = info.textContent;
+            enlargeImageModal.showModal();
+        }
+    </script>
+</body>
+</html>

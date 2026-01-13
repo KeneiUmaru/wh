@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <title>Secure Lua | Documentation</title>
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+    
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.2.1/nord.min.css" integrity="sha384-x2XdCI8Yog7KGRmrrGLegjFrrIYXEhGNxql/xEXdMoW5NkpEhlAkUHdQJxkL1vPg" crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.17.0/index.js" integrity="sha384-eme6DjBrFKzjO5DCscEfRDzjbMLA/MR4OcmSj48jogyZHps2ujPBo8+EdOZgEELg" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.0.1/nord-dark.css" integrity="sha384-4mfQkitA1YUssjHukrfVhopnhPw9eM2tX8Z05rZ/5NJRmDJN1fQp2gGfwydx2SzL" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.js"></script>
+</head>
+<body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-172W8028KH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-172W8028KH');
+    </script>
+
+    <style>
+        pre, code {
+            background: none !important;
+        }
+    </style>
+  
+    
+    <nord-layout>
+        <nord-navigation slot="nav">
+            <div slot="header">
+                <h1 class="n-typescale-l n-margin-is-l">Secure <no style="color: rgb(124, 172, 245);">Lua</no></h1>
+            </div>
+            <nord-nav-group heading="Your Account">
+                <nord-nav-item href="/dashboard/" icon="file-script">Projects</nord-nav-item>
+                <nord-nav-item href="/dashboard/rewards" icon="interface-star">Rewards</nord-nav-item>
+                <nord-nav-item href="/dashboard/upload" icon="file-code">Upload</nord-nav-item>
+                <nord-nav-item href="/dashboard/storage" icon="generic-storage">Server Storage</nord-nav-item>
+                <nord-nav-item href="#" active icon="interface-layers">Documentation</nord-nav-item>
+                <nord-nav-item href="/dashboard/settings" icon="navigation-settings">Settings</nord-nav-item>
+            </nord-nav-group>
+            <nord-nav-group heading="Support">
+                <nord-nav-item href="/dashboard/tickets" icon="generic-mail">Tickets</nord-nav-item>
+            </nord-nav-group>
+        </nord-navigation>
+
+        <nord-header slot="header">
+          <h1 class="n-typescale-l" id="welcomeBack">Documentation</h1>
+          <nord-button variant="secondary" href="/" slot="end">
+            Home
+          </nord-button>
+        </nord-header>
+
+        <h1 class="n-typescale-xl n-margin-be-l">Runtime Variables</h1>
+        <nord-stack gap="l" class="n-margin-bs-l" direction="vertical">
+            <nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">AUTH_USER_LICENSE</h4>
+                <p class="n-margin-be-s n-reset">Contains the user's License Key.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Examples</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code class="language-lua">print(AUTH_USER_LICENSE)</code>
+                    </nord-card>
+                </nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">AUTH_USER_DISCORD_ID</h4>
+                <p class="n-margin-be-s n-reset">Contains the user's Discord ID.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Examples</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code class="language-lua">print(AUTH_USER_DISCORD_ID)</code>
+                    </nord-card>
+                </nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">AUTH_USER_HWID</h4>
+                <p class="n-margin-be-s n-reset">Contains the user's HWID.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Examples</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code class="language-lua">print(AUTH_USER_HWID)</code>
+                    </nord-card>
+                </nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">AUTH_LOADER_HASH</h4>
+                <p class="n-margin-be-s n-reset">Contains the loader hash.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Examples</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code class="language-lua">print(AUTH_LOADER_HASH)</code>
+                    </nord-card>
+                </nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">AUTH_USER_EXPIRE</h4>
+                <p class="n-margin-be-s n-reset">Contains the user's expiry timestamp. (0 for never)</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Examples</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code class="language-lua">print(AUTH_USER_EXPIRE)</code>
+                    </nord-card>
+                </nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">AUTH_STORAGE</h4>
+                <p class="n-margin-be-s n-reset">Stores persistent data that can be accessed across scripts. Use unique keys to retrieve or update values easily.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Examples</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code class="language-lua">print(AUTH_STORAGE["Key"])</code>
+                    </nord-card>
+                </nord-card>
+
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">AUTH_INTEGRITY</h4>
+                <p class="n-margin-be-s n-reset">Checks the integrity of the Auth. Call it multiple times in your script.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Examples</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code class="language-lua">AUTH_INTEGRITY()</code>
+                    </nord-card>
+                </nord-card>
+
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">AUTH_SECURE_REQUEST</h4>
+                <p class="n-margin-be-s n-reset">Secure wrapper to request. Prevents requests being spied on.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Examples</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code>AUTH_SECURE_REQUEST(&lt;string Url&gt;, &lt;string Method&gt;, &lt;table Headers&gt;, &lt;string Body?&gt;) : &lt;table Response&gt;</code>
+                    </nord-card>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code class="language-lua">local Response = AUTH_SECURE_REQUEST("https://httpbin.org/get");</code><br>
+                        <code class="language-lua">print(Response.Body);</code>
+                    </nord-card>
+                </nord-card>
+
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">AUTH_CHECK_HTTP_PROXY</h4>
+                <p class="n-margin-be-s n-reset">Checks for external HTTP Proxies (Fiddler, etc)</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Examples</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <p class="n-reset n-typescale-s" style="font-family: 'Jetbrains Mono';" >AUTH_CHECK_HTTP_PROXY() : &lt;boolean ProxyDetected?&gt;</p>
+                    </nord-card>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code class="language-lua">local ProxyDetected = AUTH_CHECK_HTTP_PROXY();</code><br>
+                        <code class="language-lua">if ProxyDetected then</code><br>
+                        <code class="language-lua">&nbsp;&nbsp;&nbsp;&nbsp;while true do end;</code><br>
+                        <code class="language-lua">end;</code>
+                    </nord-card>
+                </nord-card>
+            </nord-card>
+        </nord-stack>
+
+        <h1 class="n-typescale-xl n-margin-bs-l">Loader F.A.Q</h1>
+        <nord-stack gap="l" class="n-margin-bs-l" direction="vertical">
+            <nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">1. My script has too many local variables</h4>
+                <p class="n-margin-be-s n-reset">Wrap your loader in a do...end block.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Examples</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <code class="language-lua">do</code>
+                        <code class="language-lua">-- Loader Here</code>
+                        <code class="language-lua">end</code>
+                    </nord-card>
+                </nord-card>
+
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">2. I encounter crashes when using AUTH_INTEGRITY within a loop</h4>
+                <p class="n-margin-be-s n-reset">To avoid crashes, it is recommended not to use AUTH_INTEGRITY within a loop.<br>Instead, place it at random intervals throughout your script.</p>
+
+                <h4 class="n-margin-be-s n-margin-bs-s" style="color: #9cb1f1;">3. I encounter crashes when obfuscating with Luraph</h4>
+                <p class="n-margin-be-s n-reset">Make sure you enable 'Static Environment' and 'Disable Line Information' in the Luraph settings.</p>
+            </nord-card>
+        </nord-stack>
+
+        <h1 class="n-typescale-xl n-margin-bs-l">API Endpoints</h1>
+        <nord-stack gap="l" class="n-margin-bs-l" direction="vertical">
+            <nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s"><dsf style="color: #f19c9c;">GET</dsf> /api/project/:projectId/licenses</h4>
+                <p class="n-margin-be-s n-reset">Retrieve all users associated with a specified project.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Headers</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Authorization:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">API Key</dd>
+                            <dt>Content-Type:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">application/json</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Parameters</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>projectId:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The ID of the project for which you want to retrieve users from</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Response</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">Returns an array of users associated with the specified project</dd>
+                        </dl>
+                    </nord-card>
+                </nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s"><dsf style="color: #9cf1a7;">POST</dsf> /api/project/:projectId/licenses</h4>
+                <p class="n-margin-be-s n-reset">Create a new user for a specified project.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Headers</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Authorization:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">API Key</dd>
+                            <dt>Content-Type:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">application/json</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Parameters</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>projectId:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The ID of the project for which the user is being created</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Body</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>DiscordID:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">Optional: The Discord ID of the user receiving the license. If not provided, the license will be redeemable without association to a specific user</dd>
+                            <dt>Expiry:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">Optional: A Unix timestamp (in seconds) specifying the license expiration date. If not provided, the license will not expire</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Response</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Key:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The generated license key</dd>
+                            <dt>Discord ID:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The associated Discord ID (if provided)</dd>
+                            <dt>HWID:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The user's hardware ID, populated after script execution</dd>
+                            <dt>ProjectID:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The project ID linked to the user</dd>
+                            <dt>Executions:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The number of times the license has been used (starts at 0)</dd>
+                            <dt>Blacklisted:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The blacklisting status (initially not set)</dd>
+                            <dt>BlacklistReason:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The reason for blacklisting (initially not set)</dd>
+                            <dt>CreatedAt:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The timestamp when the user was created</dd>
+                            <dt>ExpireAt:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The expiration timestamp, if set; otherwise, the license remains valid indefinitely</dd>
+
+                        </dl>
+                    </nord-card>
+                </nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s"><dsf style="color: #f0f19c;">PATCH</dsf> /api/project/:projectId/licenses</h4>
+                <p class="n-margin-be-s n-reset">Update an existing user associated with a specified project.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Headers</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Authorization:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">API Key</dd>
+                            <dt>Content-Type:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">application/json</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Parameters</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>projectId:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The ID of the project for which the user is being updated</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Body</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Key:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The license key used to identify the user whose license is being updated</dd>
+                            <dt>DiscordID:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">Optional: The Discord ID to associate with the license</dd>
+                            <dt>HWID:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">Optional: The new hardware ID for the license</dd>
+                            <dt>Expiry:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">Optional: The new expiration timestamp in Unix time (seconds)</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Response</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Key:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The unchanged license key</dd>
+                            <dt>Discord ID:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The updated Discord ID associated with the user</dd>
+                            <dt>HWID:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The user's hardware ID, populated after script execution</dd>
+                            <dt>ProjectID:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The project ID linked to the user</dd>
+                            <dt>Executions:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The number of times the license has been used (starts at 0)</dd>
+                            <dt>Blacklisted:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The blacklisting status (initially not set)</dd>
+                            <dt>BlacklistReason:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The reason for blacklisting (initially not set)</dd>
+                            <dt>CreatedAt:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The timestamp when the license was created</dd>
+                            <dt>ExpireAt:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The updated expiration timestamp, if provided; otherwise, the license remains valid indefinitely</dd>
+                        </dl>
+                    </nord-card>
+                </nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s"><dsf style="color: #f19c9c;">DELETE</dsf> /api/project/:projectId/licenses</h4>
+                <p class="n-margin-be-s n-reset">Delete a user associated with a specified project.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Headers</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Authorization:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">API Key</dd>
+                            <dt>Content-Type:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">application/json</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Parameters</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>projectId:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The unique identifier of the project linked to the user</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Body</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Key:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The license key of the user whose license you want to delete</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Response</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Success:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">A boolean indicating whether the license key was successfully deleted</dd>
+                        </dl>
+                    </nord-card>
+                </nord-card>
+                <h4 class="n-margin-be-s n-margin-bs-s"><dsf style="color: #9cf1a7;">POST</dsf> /api/project/:projectId/licenses/blacklist</h4>
+                <p class="n-margin-be-s n-reset">Blacklist a user associated with a specified project.</p>
+                <nord-card class="n-margin-be-m">
+                    <h5 class="n-margin-be-s n-margin-bs-s">Headers</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Authorization:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">API Key</dd>
+                            <dt>Content-Type:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">application/json</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Parameters</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>projectId:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The unique identifier of the project linked to the user</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Body</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Key:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">The license key of the user whose license you want to blacklist</dd>
+                            <dt>Blacklisted:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">A boolean indicating whether to blacklist the user (true for blacklisted, false for not blacklisted)</dd>
+                            <dt>BlacklistReason:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">Optional: A reason for blacklisting the user</dd>
+                        </dl>
+                    </nord-card>
+                    <h5 class="n-margin-be-s n-margin-bs-s">Response</h5>
+                    <nord-card style="" class="n-margin-be-s">
+                        <dl class="n-reset n-ds">
+                            <dt>Success:</dt>
+                            <dd class="n-typescale-s" style="color: #9cb1f1;">A boolean indicating whether the license key was successfully blacklisted</dd>
+                        </dl>
+                    </nord-card>
+                </nord-card>
+            </nord-card>
+        </nord-stack>
+    </nord-layout>
+</body>
+</html>

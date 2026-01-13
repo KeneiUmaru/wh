@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.1.1/nord.min.css" integrity="sha384-zz2Vh/uaPtnKKnKq4a8aP/R7ybJEZD3LuwnvmLE+p42C+Zjr2R0Y+PKwdABWc61A" crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.8.0/index.js" integrity="sha384-zvZDBl7G/h/0UeesdZH1CBfL9kfoMi+5/I28m8u8yCgzJC7kohDH3I6XgaMzYnLW" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.0.1/nord-dark.css" integrity="sha384-4mfQkitA1YUssjHukrfVhopnhPw9eM2tX8Z05rZ/5NJRmDJN1fQp2gGfwydx2SzL" crossorigin="anonymous" />
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <title>Secure Lua | Your Reward</title>
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+</head>
+<body>
+    <style>
+        body {
+            background: var(--n-color-surface);
+            margin: 0;
+        }
+
+        #info {
+            width: 65%;
+        }
+
+        nord-stack {
+            width: 50%;
+        }
+
+        .icon {
+            position: relative;
+            bottom: -3px;
+        }
+
+        .faq {
+            appearance: none;
+            box-sizing: border-box;
+            border: 0;
+        }
+
+        .img-comp-container {
+            position: relative;
+            height: 200px; /*should be the same height as the images*/
+        }
+    </style>
+    
+    <style>
+        @media screen and (max-width: 600px) {
+            nord-stack, #info {
+                width: 80%;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+    
+    <nord-header>
+        <h1 class="n-typescale-l">Secure Lua</h1>
+        <img src="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto,h_50/mwgwjgjq0hhhy3nsobhc" alt="" srcset="">
+        <nord-button href="/" slot="end">Home</nord-button>
+    </nord-header>
+
+    <nord-empty-state class="n-gap-m">
+        <h2>Your Reward</h2>
+
+        <nord-card>
+            <nord-input type="text" value="<%-license%>" label="License Key" expand disabled></nord-input>
+            <nord-button class="n-margin-bs-s" onclick="CopyKey()" size="s" variant="primary">Copy to Clipboard</nord-button>
+            <p class="n-reset n-typescale-s n-margin-bs-s" id="expiryLabel">Expiry: </p>
+        </nord-card>
+    </nord-empty-state>
+
+    <nord-modal id="notificationModal" size="s">
+        <div class="n-reset n-typeset">
+            <h2 id="notificationModalTitle">Purchase Successful</h2>
+            <p id="notificationModalDescription"></p>
+          </div>
+          <form method="dialog" slot="footer">
+            <nord-button expand variant="primary">Okay</nord-button>
+          </form>
+    </nord-modal>
+
+    <nord-divider direction="horizontal"></nord-divider>
+    
+    <nord-empty-state>
+        <nord-stack justify-content="center" direction="horizontal">
+            <a href="/tos/">Terms of Service</a>
+            <a href="/privacy/">Privacy Policy</a>
+            <a href="https://discord.gg/cSJwsDAtXx">Discord</a>
+         </nord-stack>
+    </nord-empty-state>    
+
+    <script>
+        const expiryLabel = document.getElementById("expiryLabel");
+        const expiry = new Date(+"<%-expiry%>");
+
+        function OpenModal(id) {
+            const element = document.getElementById(id);
+            if (element.open) {
+                element.close();
+            } else {
+                element.showModal();
+            }
+        }
+
+        function CreateNotification(Title, Description) {
+            notificationModalTitle.textContent = Title;
+            notificationModalDescription.textContent = Description;
+            OpenModal("notificationModal");
+        }
+
+        function CopyKey() {
+            navigator.clipboard.writeText(`<%-license%>`);
+            CreateNotification("Success", "Copied to Clipboard")
+        }
+
+        expiryLabel.textContent = `Expiry: ${expiry.toLocaleString()}`
+    </script> 
+</body>
+</html>

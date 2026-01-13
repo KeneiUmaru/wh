@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <title>Secure Lua | Rewards</title>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.2.1/nord.min.css" integrity="sha384-x2XdCI8Yog7KGRmrrGLegjFrrIYXEhGNxql/xEXdMoW5NkpEhlAkUHdQJxkL1vPg" crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.17.0/index.js" integrity="sha384-eme6DjBrFKzjO5DCscEfRDzjbMLA/MR4OcmSj48jogyZHps2ujPBo8+EdOZgEELg" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.0.1/nord-dark.css" integrity="sha384-4mfQkitA1YUssjHukrfVhopnhPw9eM2tX8Z05rZ/5NJRmDJN1fQp2gGfwydx2SzL" crossorigin="anonymous" />
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+</head>
+<body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-172W8028KH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-172W8028KH');
+    </script>
+    
+    <nord-layout>
+        <nord-navigation slot="nav">
+            <div slot="header">
+                <h1 class="n-typescale-l n-margin-is-l">Secure <no style="color: rgb(124, 172, 245);">Lua</no></h1>
+            </div>
+            <nord-nav-group heading="Your Account">
+                <nord-nav-item href="/dashboard/" icon="file-script">Projects</nord-nav-item>
+                <nord-nav-item href="#" active icon="interface-star">Rewards</nord-nav-item>
+                <nord-nav-item href="/dashboard/upload" icon="file-code">Upload</nord-nav-item>
+                <nord-nav-item href="/dashboard/storage" icon="generic-storage">Server Storage</nord-nav-item>
+                <nord-nav-item href="/dashboard/documents" icon="interface-layers">Documentation</nord-nav-item>
+                <nord-nav-item href="/dashboard/settings" icon="navigation-settings">Settings</nord-nav-item>
+            </nord-nav-group>
+            <nord-nav-group heading="Support">
+                <nord-nav-item href="/dashboard/tickets" icon="generic-mail">Tickets</nord-nav-item>
+            </nord-nav-group>
+        </nord-navigation>
+
+        <nord-header slot="header">
+          <h1 class="n-typescale-l" id="welcomeBack">Your Rewards</h1>
+          <nord-button variant="secondary" onclick="logout()" slot="end">
+            <nord-icon slot="start" name="interface-logout"></nord-icon>
+            Logout
+          </nord-button>
+        </nord-header>
+
+        <h1 class="n-typescale-xl n-margin-be-m">Statistics</h1>
+        <nord-stack gap="m" direction="horizontal">
+            <nord-card style="text-align: center;">
+                <h3 slot="" style="text-align: center;">Total Uses</h3>
+                <dsf id="totalUses">67,456</dsf>
+            </nord-card>
+            <nord-card style="text-align: center;">
+                <h3 slot="" style="text-align: center;">Estimated Revenue</h3>
+                <dsf id="totalRevenue">$98.56</dsf>
+            </nord-card>
+            <nord-card style="text-align: center;">
+                <h3 slot="" style="text-align: center;">Attempted Bypasses</h3>
+                <dsf id="totalThreats">10</dsf>
+            </nord-card>
+        </nord-stack>
+
+        <h1 class="n-typescale-xl n-margin-bs-l">What are Rewards?</h1>
+        <nord-stack gap="m" class="n-margin-bs-m" direction="vertical">
+            <nord-card>
+                <p class="n-reset">Earn passive income effortlessly without charging your users a dime! Simply share your link, and once users complete the required actions, they'll receive a random license key as a reward.</p>
+                
+            </nord-card>
+
+        </nord-stack>
+        
+        <h1 class="n-typescale-xl n-margin-bs-m" id="projectLabel">Your Rewards <nord-button class="n-margin-bs-s n-margin-is-s" onclick="OpenModal('createRewardModal')" size="s"><nord-icon name="interface-add-small" slot="start"></nord-icon>Create Reward</nord-button></h1>
+        <nord-stack gap="m" class="n-margin-bs-m" direction="vertical" id="rewardStack">
+            <nord-card padding="m" id="rewardProto" style="display: none;">
+                <p class="n-reset n-margin-be-s">Best Hub</p>
+                <dl class="n-dl">
+                    <dt>Uses</dt>
+                    <dd>43,245</dd>
+                    <dt>Estimated Revenue</dt>
+                    <dd>$24.56</dd>
+                </dl>
+                <p class="n-reset n-margin-bs-s">Checkpoints</p>
+                <ul class="n-reset n-margin-is-s">
+                    <li style="color: rgb(248, 198, 133); display: none;" class="n-typescale-s">https://loot-link.com/a</li>
+                </ul>
+                <nord-button class="n-margin-bs-s" size="s" variant="dashed">
+                    Copy URL
+                    <nord-icon name="interface-copy" slot="end"></nord-icon>
+                </nord-button>
+                <nord-button class="n-margin-bs-s" size="s" variant="danger">
+                    Delete
+                    <nord-icon name="interface-delete" slot="end"></nord-icon>
+                </nord-button>
+            </nord-card>
+        </nord-stack>
+
+        <nord-modal id="createRewardModal" size="s">
+            <h2 slot="header" id="title" class="n-margin-be-s">Create Reward</h2>
+            <h3 class="n-margin-be-s n-typescale-s">Select Publisher</h3>
+            <nord-segmented-control aria-labelledby="label" class="n-margin-be-m" id="publisherList">    
+                <nord-segmented-control-item size="s" onclick="SelectPublisher(this)" label="Linkvertise" name="group2" value="linkvertise" checked></nord-segmented-control-item>
+                <nord-segmented-control-item size="s" onclick="SelectPublisher(this)" label="LootLabs" name="group2" value="lootlabs"></nord-segmented-control-item>
+            </nord-segmented-control>
+
+            <h3 class="n-margin-be-s n-typescale-s">Select Project</h3>
+            <nord-segmented-control aria-labelledby="label" class="n-margin-be-m" id="projectList">   
+            </nord-segmented-control>
+            <nord-segmented-control-item style="display: none;" onclick="SelectProject(this)" id="projectEntryProto" size="s" label="" name="group" value=""></nord-segmented-control-item>
+
+            <nord-input id="createRewardName" size="s" label="Name" hint="Reward Name (not visible to users)" class="n-reset n-margin-be-m" hint="" type="text"></nord-input>
+            <nord-input id="createRewardWebhook" size="s" label="Webhook"  hint="Log Usages and Attempted Bypasses" type="text"></nord-input>
+            <nord-input id="createRewardToken" size="s" class="n-margin-bs-s" label="Anti Bypassing Token" hint="Found in Linkvertise Settings" type="text"></nord-input>
+            <nord-range id="createRewardLength" label="Reward Length (hours)" class="n-margin-bs-s" size="s" value="1" min="1" max="72" step="0.10"></nord-range>
+            <h3 class="n-margin-be-s">Checkpoints</h3>
+            <dl class="n-reset n-margin-be-s n-margin-bs-s">
+                <dt class="n-typescale-s" id="linkvertiseTargetLinkInfo">Set 1st Linkvertise Target To:</dt>
+                <dd id="loaderHash" class="n-typescale-xs n-margin-be-s">
+                    <dsf style="font-size: 10px; color: #9cb1f1;" id="linkvertiseTargetLink">Select a Project.</dsf>
+                </dd>
+                <nord-button onclick="CopyLinkvertiseTarget()" variant="dashed" size="s">
+                    Copy
+                    <nord-icon name="interface-copy" slot="end"></nord-icon>
+                </nord-button>
+            </dl>    
+
+            <li name="urls" style="color: rgb(248, 198, 133); display: none;" class="n-typescale-s" onclick="DeleteSelf(this)" id="createProjectLinkProto"></li>
+            <ul class="n-reset n-margin-is-s n-margin-be-s" id="createProjectLinkTable">
+            </ul>
+
+            <nord-input id="createRewardURLInput" class="n-margin-bs-s n-margin-be-s" style="padding-top: 0px;" icon="" size="s" placeholder="URL" type="text">
+                <nord-icon slot="start" name="interface-globe"></nord-icon>
+            </nord-input>
+            <nord-button disabled variant="dashed" size="s" id="addCheckPointButton" onclick="CreateRewardAddLink()">
+                Add Checkpoint
+                <nord-icon slot="start" name="interface-add-small"></nord-icon>
+            </nord-button>
+
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button variant="primary" id="createRewardButton" onclick="CreateReward()">Create</nord-button>
+                <nord-button onclick="OpenModal('createRewardModal')">Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="notificationModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle">Purchase Successful</h2>
+                <p id="notificationModalDescription"></p>
+              </div>
+              <form method="dialog" slot="footer">
+                <nord-button expand variant="primary">Okay</nord-button>
+              </form>
+        </nord-modal>
+
+        <nord-modal id="paymentNeededModal" size="s">
+            <div class="n-reset n-typeset" style="text-align: center;">
+                <h2 id="paymentNeededModalTitle">You've reached your Project Limit</h2>
+                <p id="paymentNeededModalDesc">Upgrade your subscription to create more than one project</p>
+                <nord-button expand variant="primary"  href="/dashboard/settings?billing=true">Go to Billing</nord-button>
+              </div>
+        </nord-modal>
+
+        <nord-modal id="paymentModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle" style="text-align: center;">Payment Successful 🎉</h2>
+                <p id="notificationModalDescription" style="text-align: center;">Thank you for choosing Secure Lua!</p>
+              </div>
+              <nord-button class="n-margin-bs-s" onclick="OpenModal()" expand variant="primary">Okay</nord-button>
+        </nord-modal>
+    </nord-layout>
+
+    <script>
+        let UserData;
+        let Publisher = "Linkvertise";
+
+        const createProjectLinkTable = document.getElementById("createProjectLinkTable");
+        const createProjectLinkProto = document.getElementById("createProjectLinkProto");
+        const createRewardURLInput = document.getElementById("createRewardURLInput");
+
+        const notificationModalTitle = document.getElementById("notificationModalTitle");
+        const notificationModalDescription = document.getElementById("notificationModalDescription");
+
+        const paymentNeededModalTitle = document.getElementById("paymentNeededModalTitle");
+        const paymentNeededModalDesc = document.getElementById("paymentNeededModalDesc");
+
+        const projectList = document.getElementById("projectList");
+        const projectEntryProto = document.getElementById("projectEntryProto");
+
+        const linkvertiseTargetLink = document.getElementById("linkvertiseTargetLink");
+        const addCheckPointButton = document.getElementById("addCheckPointButton");
+        const linkvertiseTargetLinkInfo = document.getElementById("linkvertiseTargetLinkInfo");
+
+        const createRewardName = document.getElementById("createRewardName");
+        const createRewardWebhook = document.getElementById("createRewardWebhook");
+        const createRewardLength = document.getElementById("createRewardLength");
+        const createRewardToken = document.getElementById("createRewardToken");
+        const createRewardButton = document.getElementById("createRewardButton");
+
+        const rewardProto = document.getElementById("rewardProto");
+        const rewardStack = document.getElementById("rewardStack");
+
+        const totalUses = document.getElementById("totalUses");
+        const totalRevenue = document.getElementById("totalRevenue");
+        const totalThreats = document.getElementById("totalThreats");
+
+        function logout() {
+            if (window.location.hostname === '127.0.0.1') {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            } else {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure; domain=securelua.com";
+            }
+            window.location.reload();
+        }
+
+        function nth(i) {
+            const j = i % 10,
+                k = i % 100;
+            if (j === 1 && k !== 11) {
+                return i + "st";
+            }
+            if (j === 2 && k !== 12) {
+                return i + "nd";
+            }
+            if (j === 3 && k !== 13) {
+                return i + "rd";
+            }
+            return i + "th";
+        }
+
+        function OpenModal(id) {
+            const element = document.getElementById(id);
+            if (element.open) {
+                element.close();
+            } else {
+                element.showModal();
+            }
+        }
+
+        function PaymentNeeded(Title, Desc) {
+            paymentNeededModalTitle.textContent = Title;
+            paymentNeededModalDesc.textContent = Desc;
+            OpenModal('paymentNeededModal');
+        }
+
+        function CreateNotification(Title, Description) {
+            notificationModalTitle.textContent = Title;
+            notificationModalDescription.textContent = Description;
+            OpenModal("notificationModal");
+        }
+
+        function DeleteSelf(lol) {
+            lol.remove();
+            linkvertiseTargetLinkInfo.textContent = `Set ${nth(createProjectLinkTable.children.length + 1)} ${Publisher} Target To:`
+            linkvertiseTargetLink.textContent = `https://securelua.com/rewards/?id=${projectList.getAttribute("id")}&x=${createProjectLinkTable.children.length}`;
+        }
+
+        function SelectProject(lol) {
+            projectList.setAttribute("id", lol.value);
+            linkvertiseTargetLink.textContent = `https://securelua.com/rewards/?id=${lol.value}`;
+            addCheckPointButton.disabled = false;
+        }
+
+        function SelectPublisher(lol) {
+            switch (lol.getAttribute("value")) {
+                case "linkvertise":
+                    createRewardToken.setAttribute("label", "Anti Bypassing Token");
+                    createRewardToken.setAttribute("hint", "Found in Linkvertise Settings");
+                    createProjectLinkTable.setAttribute("publisher", "Linkvertise");
+                    Publisher = "Linkvertise";
+                    break;
+                case "lootlabs":
+                    createRewardToken.setAttribute("label", "API-Token");
+                    createRewardToken.setAttribute("hint", "Found in LootLabs Settings");
+                    Publisher = "LootLabs";
+                    break;
+            }
+
+            linkvertiseTargetLinkInfo.textContent = `Set ${nth(createProjectLinkTable.children.length + 1)} ${Publisher} Target To:`
+            createProjectLinkTable.replaceChildren();
+        }
+
+        function AddProject(Name, ID) {
+            const clone = projectEntryProto.cloneNode(true);
+            clone.label = Name;
+            clone.value = ID;
+            clone.style.display = "";
+            projectList.appendChild(clone);
+        }
+
+        function CreateRewardAddLink() {
+            createRewardURLInput.error = "";
+
+            if (createProjectLinkTable.children.length >= 20) {
+                return CreateNotification("Take it Easy", `We only allow a maximum of 20 ${Publisher} Links`);
+            }
+
+            if (!createRewardURLInput.value) {
+                return;
+            }
+
+            try {
+                new URL(createRewardURLInput.value);
+            } catch (er) {
+                createRewardURLInput.error = "Invalid URL";
+                return;
+            }
+
+            const clone = createProjectLinkProto.cloneNode(true);
+            clone.textContent = createRewardURLInput.value;
+            clone.style.display = "";
+
+            if (Publisher === "LootLabs") {
+                clone.style.color = "rgb(202, 133, 248)";
+            }
+
+            createProjectLinkTable.appendChild(clone);
+
+            linkvertiseTargetLinkInfo.textContent = `Set ${nth(createProjectLinkTable.children.length + 1)} ${Publisher} Target To:`
+            linkvertiseTargetLink.textContent = `https://securelua.com/rewards/?id=${projectList.getAttribute("id")}&x=${createProjectLinkTable.children.length}`;
+        }
+
+        async function CreateReward() {
+            createRewardButton.loading = true;
+            createRewardName.error = "";
+            createRewardWebhook.error = "";
+            createRewardToken.error = "";
+
+            if (!createRewardName.value) {
+                createRewardButton.loading = false;
+                createRewardName.error = "Name Required";
+                return;
+            }
+
+            if (!createRewardWebhook.value) {
+                createRewardButton.loading = false;
+                createRewardWebhook.error = "Webhook Required";
+                return;
+            }
+
+            if (!createRewardToken.value) {
+                createRewardButton.loading = false;
+                createRewardToken.error = "Token Required";
+                return;
+            }
+
+            if (createProjectLinkTable.children.length < 1) {
+                createRewardButton.loading = false;
+                return CreateNotification("Error", "You need at least 1 checkpoint")
+            }
+
+            const packet = await fetch(`/api/reward/`, {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    AssoicatedProject: projectList.getAttribute("id"),
+                    Name: createRewardName.value,
+                    Webhook: createRewardWebhook.value.trim(),
+                    AntiBypassToken: createRewardToken.value.trim(),
+                    RewardLength: createRewardLength.value,
+                    URLs: Object.values(document.getElementsByName("urls")).filter(x => x.style.display === "").map(x => x.textContent.trim()),
+                    Publisher
+                })
+            })
+
+            if (packet.status == 402) {
+                return PaymentNeeded("Subscription Required", "You need a paid subscription to create a reward")
+            }
+
+            if (packet.status !== 200) {
+                createRewardButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to create reward", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        function CopyLinkvertiseTarget() {
+            navigator.clipboard.writeText(linkvertiseTargetLink.textContent);
+            CreateNotification("Success", "Copied to your Clipboard");
+        }
+
+        function AddRewardToList(Title, Uses, URLs, ConnectedProject, Publisher) {
+            const clone = rewardProto.cloneNode(true);
+            clone.children[0].textContent = Title;
+            clone.children[1].children[1].textContent = Uses.toString();
+            clone.children[1].children[3].textContent = `$${(Uses * 0.07).toLocaleString()}`;
+
+            const list = clone.children[3]
+
+            for (const url of URLs) {
+                const inner = clone.children[3].children[0].cloneNode(true);
+                inner.textContent = url;
+                inner.style.display = "";
+                if (Publisher === "LootLabs") {
+                    inner.style.color = "rgb(202, 133, 248)";
+                }
+                list.appendChild(inner);
+            }
+
+            clone.children[4].onclick = function() {
+                navigator.clipboard.writeText(`https://securelua.com/rewards/?id=${ConnectedProject}`);
+                CreateNotification("Success", "Copied to your Clipboard. You can now share this with users to make money!");
+            }
+
+            clone.children[5].onclick = async function() {
+                const packet = await fetch(`/api/reward/${ConnectedProject}/`, {
+                    method: "DELETE",
+                    headers: {
+                        ["Authorization"]: "<%-authorization%>"
+                    }
+                });
+
+                if (packet.status !== 200) {
+                    const json = await packet.json();
+                    return CreateNotification("Failed to delete reward", `Reason: ${json.error}`);
+                }
+
+                window.location.reload();
+            }
+            
+            clone.style.display = "";
+            rewardStack.appendChild(clone);
+        }
+
+        (async () => {
+            const Packet = await fetch(`/api/user/<%-authorization%>`);
+            UserData = await Packet.json();
+
+            for (const { id, Name } of UserData.Projects) {
+                AddProject(Name, id);
+            }
+
+            const Packet2 = await fetch(`/api/reward/`, {
+                method: "GET",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>"
+                }
+            });
+            const RewardData = await Packet2.json();
+
+            let _TotalUses = 0;
+            let _TotalThreats = 0;
+            for (const { Uses, AttemptedBypasses, URLs, Name, ConnectedProject, Publisher } of RewardData) {
+                AddRewardToList(Name, Uses, URLs, ConnectedProject, Publisher);
+
+                _TotalUses = _TotalUses + Uses;
+                _TotalThreats = _TotalThreats + AttemptedBypasses
+            }
+
+            totalUses.textContent = _TotalUses.toString();
+            totalThreats.textContent = _TotalThreats.toString();
+            totalRevenue.textContent = `$${(_TotalUses * 0.07).toLocaleString()}` 
+        })();
+    </script>
+</body>
+</html>

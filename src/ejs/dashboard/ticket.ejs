@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <title>Secure Lua | Viewing Ticket</title>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.2.1/nord.min.css" integrity="sha384-x2XdCI8Yog7KGRmrrGLegjFrrIYXEhGNxql/xEXdMoW5NkpEhlAkUHdQJxkL1vPg" crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.17.0/index.js" integrity="sha384-eme6DjBrFKzjO5DCscEfRDzjbMLA/MR4OcmSj48jogyZHps2ujPBo8+EdOZgEELg" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.0.1/nord-dark.css" integrity="sha384-4mfQkitA1YUssjHukrfVhopnhPw9eM2tX8Z05rZ/5NJRmDJN1fQp2gGfwydx2SzL" crossorigin="anonymous" />
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+</head>
+<body>
+    <nord-layout>
+        <nord-navigation slot="nav">
+            <div slot="header">
+                <h1 class="n-typescale-l n-margin-is-l">Secure <no style="color: rgb(124, 172, 245);">Lua</no></h1>
+            </div>
+            <nord-nav-group heading="Your Account">
+                <nord-nav-item href="/dashboard/" icon="file-script">Projects</nord-nav-item>
+                <nord-nav-item href="/dashboard/rewards" icon="interface-star">Rewards</nord-nav-item>
+                <nord-nav-item href="/dashboard/upload" icon="file-code">Upload</nord-nav-item>
+                <nord-nav-item href="/dashboard/storage" icon="generic-storage">Server Storage</nord-nav-item>
+                <nord-nav-item href="/dashboard/documents" icon="interface-layers">Documentation</nord-nav-item>
+                <nord-nav-item href="/dashboard/settings" icon="navigation-settings">Settings</nord-nav-item>
+            </nord-nav-group>
+            <nord-nav-group heading="Support">
+                <nord-nav-item href="/dashboard/tickets" active icon="generic-mail">Tickets</nord-nav-item>
+            </nord-nav-group>
+        </nord-navigation>
+
+        <nord-header slot="header">
+          <h1 class="n-typescale-l" id="welcomeBack"></h1>
+          <nord-button variant="secondary" onclick="logout()" slot="end">
+            <nord-icon slot="start" name="interface-logout"></nord-icon>
+            Logout
+          </nord-button>
+        </nord-header>
+        
+
+        <nord-stack gap="l" direction="vertical" id="messageStack">
+            <nord-message id="messageProto" style="display: none;">
+                <yes>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</yes>
+                <span slot="footer">support@securelua.com, sent at: 03/06/45, 01:45 AM</span>
+            </nord-message>
+        </nord-stack>
+
+        <div>
+            <nord-textarea placeholder="Type your message here" id="sendMessageContent" expand></nord-textarea>
+            <nord-button-group variant="spaced" class="n-margin-bs-s">
+                <nord-button variant="primary" id="sendMessageButton" onclick="SendMessage()">Send Message</nord-button>
+                <nord-button style="display: none;" id="closeTicketButton" onclick="CloseTicket()" variant="dashed">Close Ticket</nord-button>
+                <nord-button style="display: none;" id="deleteTicketButton" onclick="DeleteTicket()" variant="danger">Delete Ticket</nord-button>
+            </nord-button-group>
+        </div>
+        
+        <nord-modal id="notificationModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle">Purchase Successful</h2>
+                <p id="notificationModalDescription"></p>
+              </div>
+              <form method="dialog" slot="footer">
+                <nord-button expand variant="primary">Okay</nord-button>
+              </form>
+        </nord-modal>
+    </nord-layout>
+
+    <script>
+        let UserData;
+
+        const WelcomeText = document.getElementById("welcomeBack");
+
+        const MessageStack = document.getElementById("messageStack");
+        const MessageProto = document.getElementById("messageProto");
+
+        const notificationModalTitle = document.getElementById("notificationModalTitle");
+        const notificationModalDescription = document.getElementById("notificationModalDescription");
+
+        const paymentNeededModalTitle = document.getElementById("paymentNeededModalTitle");
+        const paymentNeededModalDesc = document.getElementById("paymentNeededModalDesc");
+
+        const sendMessageContent = document.getElementById("sendMessageContent");
+        const sendMessageButton = document.getElementById("sendMessageButton");
+
+        const closeTicketButton = document.getElementById("closeTicketButton");
+        const deleteTicketButton = document.getElementById("deleteTicketButton");
+
+        function logout() {
+            if (window.location.hostname === '127.0.0.1') {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            } else {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure; domain=securelua.com";
+            }
+            window.location.reload();
+        }
+
+        function OpenModal(id) {
+            const element = document.getElementById(id);
+            if (element.open) {
+                element.close();
+            } else {
+                element.showModal();
+            }
+        }
+
+        function PaymentNeeded(Title, Desc) {
+            paymentNeededModalTitle.textContent = Title;
+            paymentNeededModalDesc.textContent = Desc;
+            OpenModal('paymentNeededModal');
+        }
+
+        function CreateNotification(Title, Description) {
+            notificationModalTitle.textContent = Title;
+            notificationModalDescription.textContent = Description;
+            OpenModal("notificationModal");
+        }
+
+        function AddMessage(username, message, timestamp) {
+            const clone = MessageProto.cloneNode(true);
+            clone.children[0].textContent = message;
+            clone.children[1].textContent = `${username}, sent at: ${new Date(timestamp).toLocaleString()}`
+            clone.style.display = "";
+            MessageStack.appendChild(clone);
+        }
+
+        async function SendMessage() {
+            sendMessageButton.loading = true;
+            sendMessageContent.error = "";
+
+            if (sendMessageContent.value.length <= 1) {
+                sendMessageButton.loading = false;
+                sendMessageContent.error = "Please enter a message";
+                return;
+            }
+
+            if (sendMessageContent.value.length > 2000) {
+                sendMessageButton.loading = false;
+                sendMessageContent.error = "Maximum 2000 characters";
+                return;
+            }
+            
+            const packet = await fetch(`/api/ticket/<%-id%>/`, {
+                method: "POST",
+                headers: {
+                    ["content-type"]: "application/json",
+                    ["authorization"]: "<%-authorization%>"
+                },
+                body: JSON.stringify({
+                    Message: sendMessageContent.value
+                })
+            });
+
+            if (packet.status == 402) {
+                sendMessageButton.loading = false;
+                return PaymentNeeded("Subscription Required", "You need a paid subscription to send a message")
+            }
+
+            if (packet.status !== 200) {
+                sendMessageButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to send message", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+        
+        async function CloseTicket() {
+            closeTicketButton.loading = true;
+
+            const packet = await fetch(`/api/ticket/<%-id%>/close`, {
+                method: "POST",
+                headers: {
+                    ["authorization"]: "<%-authorization%>"
+                }
+            });
+
+            if (packet.status !== 200) {
+                closeTicketButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to close ticket", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        async function DeleteTicket() {
+            deleteTicketButton.loading = true;
+
+            const packet = await fetch(`/api/ticket/<%-id%>/`, {
+                method: "DELETE",
+                headers: {
+                    ["authorization"]: "<%-authorization%>"
+                }
+            });
+
+            if (packet.status !== 200) {
+                deleteTicketButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to delete ticket", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        (async () => {
+            const Packet = await fetch(`/api/user/<%-authorization%>`);
+            UserData = await Packet.json();
+
+            if (UserData.Admin) {
+                closeTicketButton.style.display = "";
+                deleteTicketButton.style.display = "";
+            }
+
+            const Packet2 = await fetch(`/api/ticket/<%-id%>/`, {
+                method: "GET",
+                headers: {
+                    ["authorization"]: "<%-authorization%>"
+                }
+            })
+            const TicketData = await Packet2.json();
+
+            if (TicketData.Status === "Closed") {
+                sendMessageContent.placeholder = "Ticket closed by Administrator"
+                sendMessageContent.disabled = true;
+                sendMessageButton.disabled = true;
+            }
+
+            for (const { username, message, timestamp } of TicketData.Messages) {
+                AddMessage(username, message, timestamp);
+            }
+
+            WelcomeText.textContent = `Viewing ${TicketData.Name}`;
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Lua | Viewing Project</title>
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.3.1/nord.min.css"  crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.19.0/index.js"crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.1.1/nord-dark.css" crossorigin="anonymous" />
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+</head>
+<body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-172W8028KH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-172W8028KH');
+    </script>
+    
+    <nord-layout>
+        <nord-navigation slot="nav">
+            <div slot="header">
+                <h1 class="n-typescale-l n-margin-is-l">Secure <no style="color: rgb(124, 172, 245);">Lua</no></h1>
+            </div>
+            <nord-nav-group heading="Your Account">
+                <nord-nav-item href="/dashboard/" active icon="file-script">Projects</nord-nav-item>
+                <nord-nav-item href="/dashboard/rewards" icon="interface-star">Rewards</nord-nav-item>
+                <nord-nav-item href="/dashboard/upload" icon="file-code">Upload</nord-nav-item>
+                <nord-nav-item href="/dashboard/storage" icon="generic-storage">Server Storage</nord-nav-item>
+                <nord-nav-item href="/dashboard/documents" icon="interface-layers">Documentation</nord-nav-item>
+                <nord-nav-item href="/dashboard/settings" icon="navigation-settings">Settings</nord-nav-item>
+            </nord-nav-group>
+            <nord-nav-group heading="Support">
+                <nord-nav-item href="/dashboard/tickets" icon="generic-mail">Tickets</nord-nav-item>
+            </nord-nav-group>
+        </nord-navigation>
+
+        <nord-header slot="header">
+          <h1 class="n-typescale-l" id="welcomeBack">Welcome back, support@securelua.com</h1>
+          <nord-button variant="secondary" href="/dashboard/" slot="end">
+            Home
+          </nord-button>
+        </nord-header>
+
+        <h1 class="n-typescale-xl n-margin-be-m">Project Statistics</h1>
+        <nord-stack gap="m" direction="horizontal">
+            <nord-card style="text-align: center;">
+                <h3 slot="" style="text-align: center;">Users</h3>
+                <dsf id="totalUsers">67,456</dsf>
+            </nord-card>
+            <nord-card style="text-align: center;">
+                <h3 slot="" style="text-align: center;">Executions</h3>
+                
+                <dsf id="totalExecutions">35,674</dsf>
+                
+            </nord-card>
+            <nord-card style="text-align: center;">
+                <h3 slot="" style="text-align: center;">Threats</h3>
+                <dsf id="totalThreats">10</dsf>
+            </nord-card>
+        </nord-stack>
+        <p>
+            Need more users? Upgrade your subscription <a href="/dashboard/settings">here</a>
+        </p>
+        
+        <h1 class="n-typescale-xl n-margin-bs-m">Loader</h1>
+        <nord-stack gap="l" class="n-margin-bs-m" direction="vertical">
+            <nord-card>
+                <dl class="n-reset n-ds">
+                    <dt>Hash</dt>
+                    <dd id="loaderHash">3b8e3cfe-f2da-48e2-96f3-155add006c68</dd>
+                    <dt>Generated At</dt>
+                    <dd id="loaderCreatedAt">02/13/2024</dd>
+                </dl>    
+                <nord-button variant="dashed" class="n-margin-bs-s" href="/api/project/<%-id%>/loader.lua?api_key=<%-authorization%>" download="true">Download</nord-button>
+                <nord-button variant="danger" onclick="OpenModal('generateLoaderModal')">Regenerate</nord-button>
+
+                <p slot="footer" class="n-reset" style="text-wrap: auto;">Your loader is unique and randomly generated, don't share it with anyone.</p>
+            </nord-card>
+            <nord-card>
+                <h1 slot="header">Setup</h1>
+                <nord-card>
+                    1. Download Your Loader
+                </nord-card>
+                <nord-card>
+                    2. Copy And Paste The Loader To The Top Of Your Script
+                </nord-card>
+                <nord-card>
+                    3. Obfuscate The Script
+                </nord-card>
+            </nord-card>
+        </nord-stack>
+
+        <nord-modal id="generateLoaderModal" size="s" aria-labelledby="title">
+            <h2 slot="header" id="title">Before you continue</h2>
+            <nord-checkbox id="loaderKeyGUI" class="n-margin-be-s" size="m" label="Include GUI?" hint="If 'script_key' is undefined, users can input their key via our GUI"></nord-checkbox>
+            <nord-divider class="n-margin-be-s"></nord-divider>
+            <p class="n-reset n-typescale-m" style="padding-top: 12px;">We recommend only regenerating your loader if you can distribute new versions of your scripts.<br><br>Regenerating your loader will cause your current loader to be unfunctional, which could affect user experience.</p>
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button onclick="GenerateLoader()" variant="danger" id="generateLoaderModalButton" autofocus>Continue</nord-button>
+                <nord-button id="confirmButton" onclick="openModal('generateLoaderModal')" autofocus>Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="updateUserModal" size="s" aria-labelledby="title">
+            <h2 slot="header" id="title">Managing User</h2>
+            <nord-input label="License Key" id="updateUserModalLicense" class="n-reset n-margin-bs-s" disabled></nord-input>
+            <nord-input label="Discord ID" id="updateUserModalDiscord" class="n-reset n-margin-bs-s"></nord-input>
+            <nord-date-picker label="Expiry Date" id="updateUserModalExpiry" class="n-margin-bs-s"></nord-date-picker>
+            <nord-button-group slot="footer">
+                
+                <nord-button onclick="UpdateUser()" id="updateUserButton" variant="dashed" autofocus>Update</nord-button>
+                <nord-button onclick="OpenModal('blacklistUserModal')"  id="blacklistUserButton" variant="danger" autofocus>Blacklist User</nord-button>
+                <nord-button onclick="UnblacklistUser()" style="display: none;" id="unblacklistUserButton" autofocus>Unblacklist User</nord-button>
+                <nord-button onclick="DeleteUser()" id="deleteUserButton" variant="danger" autofocus>Delete User</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="blacklistUserModal" size="s" aria-labelledby="title">
+            <h2 slot="header" id="title">Blacklist User</h2>
+            <nord-input label="Reason" id="blacklistUserModalReason" class="n-reset n-margin-bs-s" type="text"></nord-input>
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button onclick="BlacklistUser()" id="blacklistUserModalButton" variant="danger" autofocus>Continue</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="createUserModal" size="s" aria-labelledby="title">
+            <h2 slot="header" id="title">Create User</h2>
+            <nord-input expand label="Discord ID" id="createUserModalDiscord" class="n-reset n-margin-bs-s" hint="Leave blank to create a redeemable key" type="tel"></nord-input>
+            <nord-date-picker expand label="Expiry Date" hint="Leave blank for the user to never expire" id="createUserModalExpiry" class="n-margin-bs-s"></nord-date-picker>
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button onclick="CreateUser()" variant="primary" id="createUserButton" autofocus>Create</nord-button>
+                <nord-button id="confirmButton" onclick="OpenModal('createUserModal')" autofocus>Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="generateKeyModal" size="s" aria-labelledby="title">
+            <h2 slot="header" id="title">Generate Keys</h2>
+            <p class="n-reset n-margin-be-s">Output Type</p>
+            <nord-segmented-control aria-labelledby="label" class="n-margin-be-m" id="segmentedControl">
+                <nord-segmented-control-item size="s" label="JSON" name="group" value="json" checked></nord-segmented-control-item>
+                <nord-segmented-control-item size="s" label="TXT" name="group" value="txt"></nord-segmented-control-item>
+            </nord-segmented-control>
+
+            <nord-range label="Amount" id="generateKeyAmount" class="n-margin-be-s" value="1" min="1" max="100"></nord-range>
+
+            <nord-date-picker label="Expiry Date (optional)" id="generateExpiryDate" class="n-margin-be-s"></nord-date-picker>
+
+            <div class="cf-turnstile n-margin-be-s" id="captchaWidget" data-sitekey="0x4AAAAAAAzGSMRC1hz6cKEl" data-callback="captchaCallback"></div>
+
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button onclick="GenerateKeys()" variant="primary" id="generateKeysButton" autofocus disabled>Generate</nord-button>
+                <nord-button id="confirmButton" onclick="openModal('generateKeyModal')" autofocus>Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="wipeDatabaseModal" size="s" aria-labelledby="title">
+            <h2 slot="header" id="title">Before you Continue</h2>
+            <p class="n-reset">This will wipe your entire database.<br><b>All your users will be deleted forever.</b></p>
+            <nord-input class="n-margin-bs-s" oninput="WipeDatabasePasswordInput()" id="wipeDatabasePassword" type="password" label="Enter your password to continue" expand><nord-icon slot="start" name="interface-password"></nord-icon></nord-input>
+            <div class="cf-turnstile n-margin-bs-s" id="captchaWidget" data-sitekey="0x4AAAAAAAzGSMRC1hz6cKEl" data-callback="captchaCallback"></div>
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button onclick="WipeDatabase()" variant="danger" id="wipeDatabaseButton" autofocus disabled>Continue</nord-button>
+                <nord-button onclick="openModal('wipeDatabaseModal')" autofocus>Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <h1 class="n-typescale-xl n-margin-bs-l">Users<nord-button class="n-margin-bs-s n-margin-is-s" variant="dashed" size="s" onclick="OpenModal('createUserModal')">Create User</nord-button><nord-button class="n-margin-bs-s n-margin-is-s" variant="dashed" size="s" onclick="OpenModal('generateKeyModal')">Generate Keys</nord-button><nord-button class="n-margin-bs-s n-margin-is-s" variant="danger" size="s" onclick="OpenModal('wipeDatabaseModal')">Wipe Database<nord-icon slot="end" name="generic-database" ></nord-icon></nord-button></h1>
+        <nord-input oninput="SearchBarChange(this)" placeholder="Search by License Key or Discord ID" expand><nord-icon slot="start" name="navigation-search"></nord-icon></nord-input>
+
+        <nord-table class="n-margin-bs-s">
+            <table id="licenseTable">
+              <thead>
+                <tr>
+                  <th class="">License Key</th>
+                  <th>Discord ID</th>
+                  <th>Status</th>
+                  <th>HWID Linked</th>
+                  <th class="n-table-align-right">Created</th>
+                  <th class="n-table-align-right">Expiry</th>
+                  <th class="n-table-align-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="licenseProto" style="display: none;">
+                  <td class="n-caption">93625eba-0637-4488-8830-46b736a45978</td>
+                  <td class="n-caption">787086729470541844</td>
+                  <td><nord-badge variant="success">Whitelisted</nord-badge></td>
+                  <td>✓</td>
+                  <td class="n-caption n-table-align-right">01/11/2024</td>
+                  <td class="n-caption n-table-align-right">01/12/2024</td>
+                  <td class="n-table-align-right"><nord-button onclick="ManageUser(this)">Manage</nord-button></td>
+                </tr>
+              </tbody>
+            </table>
+        </nord-table>
+
+        <nord-modal id="paymentNeededModal" size="s">
+            <div class="n-reset n-typeset" style="text-align: center;">
+                <h2 id="paymentNeededModalTitle">You've reached your Project Limit</h2>
+                <p id="paymentNeededModalDesc">Upgrade your subscription to create more than one project</p>
+                <nord-button expand variant="primary" href="/dashboard/settings?billing=true">Go to Billing</nord-button>
+              </div>
+        </nord-modal>
+
+        <nord-modal id="notificationModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle">Purchase Successful</h2>
+                <p id="notificationModalDescription"></p>
+              </div>
+              <form method="dialog" slot="footer">
+                <nord-button expand variant="primary">Okay</nord-button>
+              </form>
+        </nord-modal>
+    </nord-layout>
+
+    <script>
+        let Licenses;
+
+        const WelcomeText = document.getElementById("welcomeBack");
+        const TotalUsers = document.getElementById("totalUsers");
+        const TotalExecutions = document.getElementById("totalExecutions");
+        const TotalThreats = document.getElementById("totalThreats");
+
+        const LicenseProto = document.getElementById("licenseProto");
+        const LicenseTable = document.getElementById("licenseTable");
+
+        const notificationModalTitle = document.getElementById("notificationModalTitle");
+        const notificationModalDescription = document.getElementById("notificationModalDescription");
+
+        const createUserButton = document.getElementById("createUserButton");
+
+        const loaderHash = document.getElementById("loaderHash");
+        const loaderCreatedAt = document.getElementById("loaderCreatedAt");
+
+        const generateLoaderModalButton = document.getElementById("generateLoaderModalButton");
+        const updateUserModalLicense = document.getElementById("updateUserModalLicense");
+        const updateUserModalDiscord = document.getElementById("updateUserModalDiscord");
+        const updateUserModalExpiry = document.getElementById("updateUserModalExpiry");
+        const updateUserButton = document.getElementById("updateUserButton");
+
+        const paymentNeededModalTitle = document.getElementById("paymentNeededModalTitle");
+        const paymentNeededModalDesc = document.getElementById("paymentNeededModalDesc");
+
+        const deleteUserButton = document.getElementById("deleteUserButton");
+        const blacklistUserButton = document.getElementById("blacklistUserButton");
+        const unblacklistUserButton = document.getElementById("unblacklistUserButton");
+
+        const blacklistUserModalReason = document.getElementById("blacklistUserModalReason");
+        const blacklistUserModalButton = document.getElementById("blacklistUserModalButton");
+        
+        const generateKeysButton = document.getElementById("generateKeysButton");
+        const segmentedControl = document.getElementById("segmentedControl");
+        const generateKeyAmount = document.getElementById("generateKeyAmount");
+        const generateExpiryDate = document.getElementById("generateExpiryDate");
+
+        const wipeDatabasePassword = document.getElementById("wipeDatabasePassword");
+        const wipeDatabaseButton = document.getElementById("wipeDatabaseButton");
+        
+        const loaderKeyGUI = document.getElementById("loaderKeyGUI");
+
+        let hresponse;
+        function captchaCallback(response) {
+            generateKeysButton.disabled = false;
+            hresponse = response;
+        }
+
+        async function WipeDatabasePasswordInput() {
+            wipeDatabaseButton.disabled = !wipeDatabasePassword.value.length;
+        }
+
+        function saveTextAsFile(text, filename) {
+            const blob = new Blob([text], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
+
+        async function WipeDatabase() {
+            wipeDatabaseButton.loading = true;
+            saveTextAsFile(JSON.stringify(Licenses, null, 4), "backup-database.json");
+            
+            const packet = await fetch(`/api/project/<%-id%>/licenses/wipe`, {
+                method: "DELETE",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Password: wipeDatabasePassword.value,
+                    Token: hresponse
+                })
+            });
+
+            if (packet.status !== 200) {
+                wipeDatabaseButton.loading = false;
+                CreateNotification("Failed to wipe database", "We failed to wipe your database. Try again later?");
+                turnstile.reset();
+            }
+
+            window.location.reload();
+        }
+
+
+        async function GenerateKeys() {
+            generateKeysButton.loading = true;
+
+            const packet = await fetch(`/api/project/<%-id%>/licenses/generate`, {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Amount: generateKeyAmount.value,
+                    Token: hresponse,
+                    Expiry: generateExpiryDate.valueAsNumber / 1000
+                })
+            });
+
+            if (packet.status == 402) {
+                generateKeysButton.loading = false;
+                return PaymentNeeded("Subscription Required", "You need a paid subscription to create more than two users");
+            }
+
+            if (packet.status !== 200) {
+                generateKeysButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to Generate", `Reason: ${body.error}`);
+            }
+
+            const response = await packet.json();
+            switch (Array.from(segmentedControl.children).filter(a => a.getAttribute("checked") == "").pop().value) {
+                case "json": 
+                    saveTextAsFile(JSON.stringify(response, null, 4), "keys.json");
+                    break;
+                default:
+                    saveTextAsFile(response.join("\n"), "keys.txt")
+            }
+
+            generateKeysButton.loading = false;
+            window.location.reload();
+        }
+
+        function OpenModal(id) {
+            const element = document.getElementById(id);
+            if (element.open) {
+                element.close();
+            } else {
+                element.showModal();
+            }
+        }
+
+        function PaymentNeeded(Title, Desc) {
+            paymentNeededModalTitle.textContent = Title;
+            paymentNeededModalDesc.textContent = Desc;
+            OpenModal('paymentNeededModal');
+        }
+
+        function ManageUser(thiis) {
+            const key = thiis.parentElement.parentElement.getAttribute("key");
+            const { Key, DiscordID, ExpireAt, Blacklisted } = Licenses.filter(x => x.Key == key).pop();
+            
+            if (ExpireAt) {
+                updateUserModalExpiry.valueAsNumber = ExpireAt * 1000;
+            }
+
+            if (unblacklistUserButton.style.display == "" && !Blacklisted) {
+                unblacklistUserButton.style.display = "none";
+                blacklistUserButton.style.display = "";
+            } 
+
+            if (Blacklisted) {
+                blacklistUserButton.style.display = "none";
+                unblacklistUserButton.style.display = ""
+            }
+
+            updateUserModalLicense.value = Key;
+            updateUserModalDiscord.value = DiscordID;
+
+            OpenModal("updateUserModal");
+        }
+
+        async function BlacklistUser() {
+            blacklistUserModalButton.loading = true;
+            blacklistUserModalReason.error = "";
+
+            if (!blacklistUserModalReason.value) {
+                blacklistUserModalButton.loading = false;
+                blacklistUserModalReason.error = "A reason is required";
+                return;
+            }
+
+            const packet = await fetch(`/api/project/<%-id%>/licenses/blacklist`, {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Key: updateUserModalLicense.value,
+                    Blacklisted: true,
+                    BlacklistReason: blacklistUserModalReason.value
+                })
+            });
+
+            if (packet.status !== 200) {
+                updateUserButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to Blacklist User", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        async function UnblacklistUser() {
+            unblacklistUserButton.loading = true;
+
+            const packet = await fetch(`/api/project/<%-id%>/licenses/blacklist`, {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Key: updateUserModalLicense.value,
+                    Blacklisted: false
+                })
+            });
+
+            if (packet.status !== 200) {
+                unblacklistUserButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to Unblacklist User", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        async function UpdateUser() {
+            updateUserButton.loading = true;
+
+            const DiscordID = document.getElementById("createUserModalDiscord");
+            const Expiry = document.getElementById("createUserModalExpiry");
+
+            const packet = await fetch(`/api/project/<%-id%>/licenses`, {
+                method: "PATCH",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Key: updateUserModalLicense.value,
+                    DiscordID: updateUserModalDiscord.value,
+                    Expiry: updateUserModalExpiry.valueAsNumber / 1000
+                })
+            });
+
+            if (packet.status !== 200) {
+                updateUserButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to Update User", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        async function DeleteUser() {
+            deleteUserButton.loading = true;
+
+            const packet = await fetch(`/api/project/<%-id%>/licenses`, {
+                method: "DELETE",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Key: updateUserModalLicense.value,
+                })
+            });
+
+            if (packet.status !== 200) {
+                deleteUserButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to Delete User", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        function CreateNotification(Title, Description) {
+            notificationModalTitle.textContent = Title;
+            notificationModalDescription.textContent = Description;
+            OpenModal("notificationModal");
+        }
+
+        function AddLicense(License, DiscordID, Blacklisted, HWID, Created, Expiry) {
+            const clone = LicenseProto.cloneNode(true);
+            clone.children[0].textContent = License;
+            clone.children[1].textContent = DiscordID ? DiscordID : "Not Linked";
+
+            if (Blacklisted) {
+                clone.children[2].children[0].variant = "danger";
+                clone.children[2].children[0].textContent = "Blacklisted";
+            }
+
+            if (!HWID) {
+                clone.children[3].textContent = "X";
+            }
+
+            clone.children[4].textContent = new Date(Created).toLocaleString();
+            clone.children[5].textContent = Expiry ? new Date(Expiry * 1000).toLocaleString() : "Not Set";
+            clone.style.display = "";
+            clone.setAttribute("key", License);
+            if (DiscordID) {
+                clone.setAttribute("did", DiscordID);
+            }
+     
+            LicenseTable.appendChild(clone);
+        }
+
+        function SearchBarChange(selfthis) {
+            const Elements = Object.values(LicenseTable.children);
+            for (const element of Elements) {
+                const Key = element.getAttribute("key");
+                const DiscordID = element.getAttribute("did");
+
+                if (Key && !Key.includes(selfthis.value)) {
+                    element.style.display = "none"
+                } else {
+                    element.style.display = "";
+                }
+
+                if (DiscordID && DiscordID.includes(selfthis.value)) {
+                    element.style.display = "";
+                }
+            }
+        }
+
+        async function CreateUser() {
+            createUserButton.loading = true;
+
+            const DiscordID = document.getElementById("createUserModalDiscord");
+            const Expiry = document.getElementById("createUserModalExpiry");
+
+            const packet = await fetch(`/api/project/<%-id%>/licenses`, {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    DiscordID: DiscordID.value.length ? DiscordID.value : null,
+                    Expiry: Expiry.valueAsNumber / 1000
+                })
+            });
+
+            if (packet.status == 402) {
+                createUserButton.loading = false;
+                return PaymentNeeded("Subscription Required", "You need a paid subscription to create more than 15 users");
+            }
+            
+            if (packet.status !== 200) {
+                createUserButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to Create User", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        async function GenerateLoader() {
+            generateLoaderModalButton.loading = true;
+
+            const packet = await fetch(`/api/project/<%-id%>/loader/generate?keyGUI=${loaderKeyGUI.checked}`, {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>"
+                }
+            });
+
+            if (packet.status == 402) {
+                generateLoaderModalButton.loading = false;
+                return PaymentNeeded("Subscription Required", "You need a paid subscription to regenerate your loader");
+            }
+
+            if (packet.status !== 200) {
+                generateLoaderModalButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to Regenerate", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        (async () => {
+            const Packet = await fetch(`/api/project/<%-id%>`, {
+                method: "GET",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>"
+                }
+            });
+
+            if (Packet.status !== 200) {
+                window.location = "/";
+            }
+
+            const ProjectData = await Packet.json();
+
+            {
+
+                loaderHash.textContent = ProjectData.LoaderHash;
+                loaderCreatedAt.textContent = new Date(ProjectData.LoaderCreated).toLocaleString();
+                WelcomeText.textContent = `Managing \"${ProjectData.Name}\"`;
+                TotalUsers.textContent = ProjectData.UserCount.toLocaleString();
+                TotalExecutions.textContent = ProjectData.ExecutionCount.toLocaleString();
+                TotalThreats.textContent = ProjectData.ThreatCount.toLocaleString();
+            }
+
+            const PacketTwo = await fetch(`/api/project/<%-id%>/licenses`, {
+                method: "GET",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>"
+                }
+            })
+
+            Licenses = await PacketTwo.json();
+            for (const { Key, DiscordID, Blacklisted, HWID, CreatedAt, ExpireAt } of Licenses) {
+                AddLicense(
+                    Key,
+                    DiscordID,
+                    Blacklisted,
+                    HWID,
+                    CreatedAt,
+                    ExpireAt
+                )
+            }
+
+  
+            if (ProjectData.LoaderVersion !== ProjectData.global_loader_version) {
+                CreateNotification("Outdated Loader", "Your loader is outdated, you need to regenerate it and update your script.");
+            }
+        })();
+    </script>
+</body>
+</html>

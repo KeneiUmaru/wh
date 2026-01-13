@@ -1,0 +1,28 @@
+{
+  "name": "keyeleutheri",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@fastify/multipart": "^9.0.1",
+    "@fastify/rate-limit": "^10.2.1",
+    "@fastify/static": "^8.0.2",
+    "@fastify/view": "^10.0.1",
+    "@prisma/client": "^5.21.1",
+    "discord-oauth2": "^2.12.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "fastify": "^5.6.2",
+    "form-urlencoded": "^6.1.5",
+    "random": "^5.1.1"
+  },
+  "devDependencies": {
+    "prisma": "^5.21.1"
+  }
+}

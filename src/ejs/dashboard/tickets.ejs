@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <title>Secure Lua | Support Tickets</title>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.2.1/nord.min.css" integrity="sha384-x2XdCI8Yog7KGRmrrGLegjFrrIYXEhGNxql/xEXdMoW5NkpEhlAkUHdQJxkL1vPg" crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.17.0/index.js" integrity="sha384-eme6DjBrFKzjO5DCscEfRDzjbMLA/MR4OcmSj48jogyZHps2ujPBo8+EdOZgEELg" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.0.1/nord-dark.css" integrity="sha384-4mfQkitA1YUssjHukrfVhopnhPw9eM2tX8Z05rZ/5NJRmDJN1fQp2gGfwydx2SzL" crossorigin="anonymous" />
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+</head>
+<body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-172W8028KH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-172W8028KH');
+    </script>
+    
+    <nord-layout>
+        <nord-navigation slot="nav">
+            <div slot="header">
+                <h1 class="n-typescale-l n-margin-is-l">Secure <no style="color: rgb(124, 172, 245);">Lua</no></h1>
+            </div>
+            <nord-nav-group heading="Your Account">
+                <nord-nav-item href="/dashboard/" icon="file-script">Projects</nord-nav-item>
+                <nord-nav-item href="/dashboard/rewards" icon="interface-star">Rewards</nord-nav-item>
+                <nord-nav-item href="/dashboard/upload" icon="file-code">Upload</nord-nav-item>
+                <nord-nav-item href="/dashboard/storage" icon="generic-storage">Server Storage</nord-nav-item>
+                <nord-nav-item href="/dashboard/documents" icon="interface-layers">Documentation</nord-nav-item>
+                <nord-nav-item href="/dashboard/settings" icon="navigation-settings">Settings</nord-nav-item>
+            </nord-nav-group>
+            <nord-nav-group heading="Support">
+                <nord-nav-item href="#" active icon="generic-mail">Tickets</nord-nav-item>
+            </nord-nav-group>
+        </nord-navigation>
+
+        <nord-header slot="header">
+          <h1 class="n-typescale-l" id="welcomeBack">Need assistance, support@securelua.com?</h1>
+          <nord-button variant="secondary" onclick="logout()" slot="end">
+            <nord-icon slot="start" name="interface-logout"></nord-icon>
+            Logout
+          </nord-button>
+        </nord-header>
+        
+        <h1 class="n-typescale-xl">Your Tickets <nord-button class="n-margin-bs-s n-margin-is-s" onclick="OpenModal('createTicketModal')" size="s"><nord-icon name="interface-add-small" slot="start"></nord-icon>New Ticket</nord-button></h1>
+        <nord-stack gap="l" class="n-margin-bs-l" direction="vertical" id="projectStack">
+            <nord-card padding="m" id="projectProto" style="display: none;">
+                <h2 slot="header">Ticket #5643</h2>
+                <dl class="n-reset n-ds">
+                    <dt>Started At</dt>
+                    <dd id="loaderCreatedAt">02/13/2024</dd>
+                    <dt>Status</dt>
+                    <dd id="loaderHash">Unclaimed</dd>
+                </dl>    
+                <div slot="footer">
+                    <nord-button onclick="OpenTicket(this)" size="s">Open Ticket</nord-button>
+                </div>
+            </nord-card>
+        </nord-stack>
+
+        <nord-modal id="createTicketModal" size="s">
+            <h2 slot="header" id="title">Create Ticket</h2>
+            <nord-textarea label="Describe your Issue" id="createTicketReason" expand></nord-textarea>
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button variant="primary" id="createTicketButton" onclick="CreateTicket()">Create</nord-button>
+                <nord-button onclick="OpenModal('createTicketModal')">Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="notificationModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle">Purchase Successful</h2>
+                <p id="notificationModalDescription"></p>
+              </div>
+              <form method="dialog" slot="footer">
+                <nord-button expand variant="primary">Okay</nord-button>
+              </form>
+        </nord-modal>
+
+        <nord-modal id="paymentNeededModal" size="s">
+            <div class="n-reset n-typeset" style="text-align: center;">
+                <h2 id="paymentNeededModalTitle">You've reached your Project Limit</h2>
+                <p id="paymentNeededModalDesc">Upgrade your subscription to create more than one project</p>
+                <nord-button expand variant="primary"  href="/dashboard/settings?billing=true">Go to Billing</nord-button>
+              </div>
+        </nord-modal>
+
+        <nord-modal id="paymentModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle" style="text-align: center;">Payment Successful 🎉</h2>
+                <p id="notificationModalDescription" style="text-align: center;">Thank you for choosing Secure Lua!</p>
+              </div>
+              <nord-button class="n-margin-bs-s" onclick="OpenModal()" expand variant="primary">Okay</nord-button>
+        </nord-modal>
+    </nord-layout>
+
+    <script>
+        let UserData;
+
+        const WelcomeText = document.getElementById("welcomeBack");
+
+        const ProjectStack = document.getElementById("projectStack");
+        const ProjectProto = document.getElementById("projectProto");
+
+        const notificationModalTitle = document.getElementById("notificationModalTitle");
+        const notificationModalDescription = document.getElementById("notificationModalDescription");
+
+        const paymentNeededModalTitle = document.getElementById("paymentNeededModalTitle");
+        const paymentNeededModalDesc = document.getElementById("paymentNeededModalDesc");
+
+        const createTicketButton = document.getElementById("createTicketButton");
+        const createTicketReason = document.getElementById("createTicketReason");
+
+        function logout() {
+            if (window.location.hostname === '127.0.0.1') {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            } else {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure; domain=securelua.com";
+            }
+            window.location.reload();
+        }
+
+        function OpenModal(id) {
+            const element = document.getElementById(id);
+            if (element.open) {
+                element.close();
+            } else {
+                element.showModal();
+            }
+        }
+
+        function PaymentNeeded(Title, Desc) {
+            paymentNeededModalTitle.textContent = Title;
+            paymentNeededModalDesc.textContent = Desc;
+            OpenModal('paymentNeededModal');
+        }
+
+        function CreateNotification(Title, Description) {
+            notificationModalTitle.textContent = Title;
+            notificationModalDescription.textContent = Description;
+            OpenModal("notificationModal");
+        }
+
+        async function CreateTicket() {
+            createTicketButton.loading = true;
+            createTicketReason.error = "";
+
+            if (createTicketReason.value.length <= 1) {
+                createTicketReason.error = "You need to provide a reason";
+                createTicketButton.loading = false;
+                return
+            }
+
+            if (createTicketReason.value.length > 2000) {
+                createTicketReason.error = "Maximum 2000 characters";
+                createTicketButton.loading = false;
+                return 
+            }
+
+            const packet = await fetch(`/api/ticket/`, {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["content-type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Message: createTicketReason.value
+                })
+            })
+
+            if (packet.status == 402) {
+                createTicketButton.loading = false;
+                return PaymentNeeded("Subscription Required", "You need a paid subscription to create a ticket")
+            }
+
+            if (packet.status !== 200) {
+                createTicketButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to create ticket", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        function OpenTicket(selfthis) {
+            const ID = selfthis.parentElement.parentElement.getAttribute("id");
+            window.location = `tickets/${ID}/`;
+        }
+
+        function AddTicket(id, Name, Started, Status) {
+            const clone = ProjectProto.cloneNode(true);
+            clone.children[0].textContent = Name
+            clone.children[1].children[1].textContent = new Date(Started).toLocaleString();
+            clone.children[1].children[3].textContent = Status;
+            clone.style.display = "";
+            clone.setAttribute("id", id);
+            ProjectStack.appendChild(clone);
+        }
+        
+        (async () => {
+            const Packet2 = await fetch(`/api/user/<%-authorization%>`);
+            UserData = await Packet2.json();
+
+            const Packet = await fetch(`/api/ticket/`, {
+                method: "GET",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>"
+                }
+            })
+            const Tickets = await Packet.json();
+            console.log(Tickets)
+            for (const { id, Name, Status, Created } of Tickets) {
+                AddTicket(id, Name, Created, Status)
+            }
+
+            WelcomeText.textContent = `Need assistance, ${UserData.Email}?`;
+        })();
+    </script>
+</body>
+</html>

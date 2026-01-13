@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <title>Secure Lua | Account Settings</title>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.2.1/nord.min.css" integrity="sha384-x2XdCI8Yog7KGRmrrGLegjFrrIYXEhGNxql/xEXdMoW5NkpEhlAkUHdQJxkL1vPg" crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.17.0/index.js" integrity="sha384-eme6DjBrFKzjO5DCscEfRDzjbMLA/MR4OcmSj48jogyZHps2ujPBo8+EdOZgEELg" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.0.1/nord-dark.css" integrity="sha384-4mfQkitA1YUssjHukrfVhopnhPw9eM2tX8Z05rZ/5NJRmDJN1fQp2gGfwydx2SzL" crossorigin="anonymous" />
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+    <script src="https://js.stripe.com/basil/stripe.js"></script>
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+</head>
+<body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-172W8028KH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-172W8028KH');
+    </script>
+    
+    <nord-layout>
+        <nord-navigation slot="nav">
+            <div slot="header">
+                <h1 class="n-typescale-l n-margin-is-l">Secure <no style="color: rgb(124, 172, 245);">Lua</no></h1>
+            </div>
+            <nord-nav-group heading="Your Account">
+                <nord-nav-item href="/dashboard/" icon="file-script">Projects</nord-nav-item>
+                <nord-nav-item href="/dashboard/rewards" icon="interface-star">Rewards</nord-nav-item>
+                <nord-nav-item href="/dashboard/upload" icon="file-code">Upload</nord-nav-item>
+                <nord-nav-item href="/dashboard/storage" icon="generic-storage">Server Storage</nord-nav-item>
+                <nord-nav-item href="/dashboard/documents" icon="interface-layers">Documentation</nord-nav-item>
+                <nord-nav-item href="#" active icon="navigation-settings">Settings</nord-nav-item>
+            </nord-nav-group>
+            <nord-nav-group heading="Support">
+                <nord-nav-item href="/dashboard/tickets" icon="generic-mail">Tickets</nord-nav-item>
+            </nord-nav-group>
+        </nord-navigation>
+
+        <nord-header slot="header">
+          <h1 class="n-typescale-l" id="welcomeBack">Account Settings</h1>
+          <nord-button variant="secondary" href="/" slot="end">
+            Home
+          </nord-button>
+        </nord-header>
+
+        <h1 class="n-typescale-xl n-margin-be-l">User Information</h1>
+        <nord-stack gap="l" class="n-margin-bs-l" direction="vertical">
+            <nord-card>
+                <dl class="n-reset n-ds">
+                    <dt>Email</dt>
+                    <dd id="userEmailElement">support@securelua.com</dd>
+                    <dt>Password</dt>
+                    <dd id="loaderHash">*********</dd>
+                    <nord-button variant="secondary" class="n-margin-bs-s" onclick="OpenModal('updateAccountModal')">Update</nord-button>
+                    <nord-button variant="secondary" onclick="logout()" slot="end">
+                        <nord-icon slot="start" name="interface-logout"></nord-icon>
+                        Logout
+                    </nord-button>
+                </dl>    
+            </nord-card>
+            <h1 class="n-typescale-xl n-margin-be-l">API Credentials</h1>
+            <nord-card>
+                <dl class="n-reset n-ds">
+                    <dt>API-Key</dt>
+                    <dd id="apiKeyElement"><%=authorization%></dd>
+                </dl>    
+                <nord-button variant="dashed" size="s" class="n-margin-bs-s" onclick="CopyAPIKey()">Copy to Clipboard</nord-button>
+                <nord-button variant="danger" size="s" class="n-margin-bs-s" onclick="OpenModal('regenerateAPIKeyModal')">Regenerate</nord-button>
+                <p slot="footer" class="n-reset" style="text-wrap: auto;">Your API-Key is unique and randomly generated, don't share it with anyone.</p>
+            </nord-card>
+        </nord-stack>
+
+        <nord-modal id="updateAccountModal" size="s">
+            <h2 slot="header" id="title">Account Information</h2>
+            <nord-input id="updateAccountModalEmail" autocomplete="on" name="email" label="Email" class="n-reset n-margin-be-m" type="email"></nord-input>
+            <nord-input id="updateAccountModalPassword" autocomplete="on" name="password" label="Password" class="n-reset n-margin-be-m" type="password"></nord-input>
+            <div class="cf-turnstile n-margin-be-s" data-sitekey="0x4AAAAAACMSUdPqkcd2sltR" data-callback="captchaCallback"></div>
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button variant="primary" id="updateAccountModalButton" disabled onclick="UpdateAccount()">Update</nord-button>
+                <nord-button onclick="OpenModal('updateAccountModal')">Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="regenerateAPIKeyModal" size="s">
+            <h2 slot="header" id="title">Regenerate API-Key</h2>
+            <p class="n-reset n-margin-be-s">Are you sure you want to regenerate your API-Key?</p>
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAACMSUdPqkcd2sltR" data-callback="regenerateCaptcha"></div>
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button variant="danger" id="regenerateAPIKeyButton" disabled onclick="RegenerateAPIKey()">Regenerate</nord-button>
+                <nord-button onclick="OpenModal('regenerateAPIKeyModal')">Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal size="s" id="extendSubscriptionModal">
+            <h2 slot="header" id="extendSubscriptionModalTitle">Upgrade Subscription</h2>
+            <h3 style="margin: 0px; padding: 0px; font-size: 15px; margin-bottom: 4px;">Select Plan</h3>
+            <nord-segmented-control aria-labelledby="label" class="n-margin-be-m" id="publisherList">    
+                <nord-segmented-control-item size="s" onclick="SelectPlan(this)" label="Pro" name="group2" value="pro" checked></nord-segmented-control-item>
+                <nord-segmented-control-item size="s" onclick="SelectPlan(this)" label="Advanced" name="group2" value="advanced"></nord-segmented-control-item>
+            </nord-segmented-control>
+            <nord-input id="upgradeSubscriptionAmountMonths" value="1" type="unit" disallow-pattern="[^0-9,]" oninput="SubscriptionInvoiceAmountUpdate(this)" placeholder="12" label="Months" style="--n-input-text-align: start" expand>
+                <div slot="end" id="amountPlanPerMonth">$7.45/pm</div>
+            </nord-input>
+            <h3>Features</h3>
+            <dl class="n-dl">
+                <dt>API Access</dt>
+                <dd>✓</dd>
+                <dt>Real-time Logs</dt>
+                <dd>✓</dd>
+                <dt>Script Upload</dt>
+                <dd>✓</dd>
+                <dt>Server Storage</dt>
+                <dd>✓</dd>
+                <dt>Rewards</dt>
+                <dd>✓</dd>
+                <dt>Users</dt>
+                <dd id="invoiceUserCount">1,500</dd>
+                <dt>Projects</dt>
+                <dd id="invoiceProjectCount">25</dd>
+            </dl>
+            <h3>Invoice</h3>
+            <dl class="n-dl">
+                <dt>Email</dt>
+                <dd id="paymentInvoiceEmail">support@securelua.com</dd>
+                <dt>Amount (USD)</dt>
+                <dd id="paymentInvoiceAmount">$7.45</dd>
+            </dl>      
+
+            <nord-button-group slot="footer">
+                <nord-button id="stripeInvoiceButton" expand onclick="stripeInvoiceCreateSubscription(this)" variant="primary">
+                    <nord-icon name="generic-credit-card"></nord-icon>
+                    Card
+                </nord-button>
+                <nord-button expand style="--n-button-background-color: #df8638;" onclick="invoiceCreateSubscription(this)" id="invoiceContinueButton" variant="primary">
+                    <nord-icon name="navigation-finances"></nord-icon>
+                    Crypto
+                </nord-button>
+                <nord-button variant="secondary" onclick="OpenModal('extendSubscriptionModal')" autofocus>Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal size="s" id="cryptoInvoiceWidget">
+            <iframe id="cryptoInvoiceIFrame" src="" width="410" height="696" frameborder="0" scrolling="no" style="overflow-y: hidden;">
+                Can't load widget
+            </iframe>
+            <nord-button variant="secondary" class="n-margin-bs-s" onclick="OpenModal('cryptoInvoiceWidget')" expand>Cancel</nord-button>
+        </nord-modal>
+
+        <nord-modal size="s" id="stripeCheckoutWidget">
+            <div id="stripeCheckoutDiv"></div>
+            <nord-button variant="secondary" class="n-margin-bs-s" onclick="OpenModal('stripeCheckoutWidget')" expand>Cancel</nord-button>
+        </nord-modal>
+
+        <h1 class="n-typescale-xl n-margin-bs-l">Billing</h1>
+        <nord-stack gap="l" class="n-margin-bs-l" direction="vertical">
+            <nord-card padding="m">
+                <h2 slot="header">Your Subscription</h2>
+                <dl class="n-dl">
+                    <dt>Type</dt>
+                    <dd id="subscriptionTypeText">Free</dd>
+                    <dt>Expires</dt>
+                    <dd id="subscriptionExpiresText">Nov 13th 2024</dd>
+                </dl>                  
+                <div slot="footer">
+                    <nord-button variant="primary" id="extendSubscriptionButton" onclick="OpenModal('extendSubscriptionModal')" size="s">Upgrade</nord-button>
+                </div>
+            </nord-card>
+        </nord-stack>
+
+        <h1 class="n-typescale-xl n-margin-bs-l n-margin-be-s">Billing History</h1>
+        <nord-table class="n-margin-bs-l" style="display: none;" id="billingHistoryMain">
+            <table id="billingHistoryTable">
+              <thead>
+                <tr>
+                  <th>Payment Type</th>
+                  <th>Status</th>
+                  <th>Description</th>
+                  <th>Price</th>
+                  <th class="n-table-align-right">Created at</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="billingEntryProto" style="display: none;">
+                  <td class="n-caption">Cryptocurrency</td>
+                  <td class="n-caption">
+                      <nord-badge>Waiting</nord-badge>
+                  </td>
+                  <td>20</td>
+                  <td>$30</td>
+                  <td class="n-table-align-right">
+                    10/03/23 23:32
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </nord-table>
+        <div style="text-align: center;" id="noBillingHistoryDiv">
+            <img src="/sad-face-svgrepo-com.svg" style="height: 100px; opacity: 0.5;" alt="" srcset="">
+            <p style="color: #d5d2d2">You have no billing history</p>
+        </div>
+
+        <nord-modal id="notificationModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle">Purchase Successful</h2>
+                <p id="notificationModalDescription"></p>
+              </div>
+              <form method="dialog" slot="footer">
+                <nord-button expand variant="primary">Okay</nord-button>
+              </form>
+        </nord-modal>
+
+    </nord-layout>
+
+    <script>
+        let UserData;
+
+        const UserEmail = document.getElementById("userEmailElement");
+        const APIKey = document.getElementById("apiKeyElement");
+
+        const ExtendSubscriptionTitle = document.getElementById("extendSubscriptionModalTitle");
+        const UpgradeButton = document.getElementById("extendSubscriptionButton");
+
+        const SubscriptionType = document.getElementById("subscriptionTypeText");
+        const SubscriptionExpires = document.getElementById("subscriptionExpiresText");
+
+        const InvoiceEmail = document.getElementById("paymentInvoiceEmail");
+        const paymentInvoiceAmount = document.getElementById("paymentInvoiceAmount");
+
+        const invoiceContinueButton = document.getElementById("invoiceContinueButton");
+        const paymentInvoiceMonths = document.getElementById("paymentInvoiceMonths");
+
+        const notificationModalTitle = document.getElementById("notificationModalTitle");
+        const notificationModalDescription = document.getElementById("notificationModalDescription");
+
+        const updateAccountModal = document.getElementById("updateAccountModal");
+        const updateAccountModalEmail = document.getElementById("updateAccountModalEmail");
+        const updateAccountModalPassword = document.getElementById("updateAccountModalPassword");
+        const updateAccountModalButton = document.getElementById("updateAccountModalButton");
+
+        const regenerateAPIKeyButton = document.getElementById("regenerateAPIKeyButton");
+
+        const upgradeSubscriptionAmountMonths = document.getElementById("upgradeSubscriptionAmountMonths");
+        const invoiceUserCount = document.getElementById("invoiceUserCount");
+        const invoiceProjectCount = document.getElementById("invoiceProjectCount");
+        const amountPlanPerMonth = document.getElementById("amountPlanPerMonth");
+        const cryptoInvoiceWidget = document.getElementById("cryptoInvoiceWidget");
+        const stripeCheckoutWidget = document.getElementById("stripeCheckoutWidget");
+
+        function PayPalPurchase() {
+            window.location.href = "https://luawhitelist.bgng.io/product/lua-whitelist";
+        }
+
+        let hresponse;
+        function captchaCallback(response) {
+            updateAccountModalButton.disabled = false;
+            hresponse = response;
+        }
+
+        let hresponse2;
+        function regenerateCaptcha(response) {
+            regenerateAPIKeyButton.disabled = false;
+            hresponse2 = response;
+        }
+
+        async function UpdateAccount() {
+            updateAccountModalEmail.error = "";
+            updateAccountModalPassword.error = "";
+
+            if (!updateAccountModalEmail.value.match(/^\S+@\S+\.\S+$/)) {
+                updateAccountModalEmail.error = "Invalid Email Address";
+                return;
+            }
+
+            if (updateAccountModalPassword.value.length < 6 || updateAccountModalPassword.value.length > 20) {
+                updateAccountModalPassword.error = "Password Must Be 6-20 Characters Long";
+                return;
+            }
+
+            updateAccountModalButton.loading = true;
+
+            const packet = await fetch(`/api/user/update`, {
+                method: "PATCH",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["captcha"]: hresponse,
+                    ["content-type"]: "application/json"
+                },
+                body: JSON.stringify({ Email: updateAccountModalEmail.value, Password: updateAccountModalPassword.value })
+            })
+
+            if (packet.status !== 200) {
+                return CreateNotification("Failed to Update Account", "There was a problem updating your account, try again later?");
+            }
+
+            window.location.reload();
+        }
+
+        function logout() {
+            if (window.location.hostname === '127.0.0.1') {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            } else {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure; domain=securelua.com";
+            }
+            window.location.reload();
+        }
+
+        async function RegenerateAPIKey() {
+            const packet = await fetch(`/api/user/regenerate`, {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["captcha"]: hresponse2
+                }
+            });
+
+            if (packet.status !== 200) {
+                return CreateNotification("Failed to Regenerate", "There was a problem updating your account, try again later?");
+            }
+
+            logout();
+        }
+
+        function OpenModal(id) {
+            const element = document.getElementById(id);
+            if (element.open) {
+                element.close();
+            } else {
+                element.showModal();
+            }
+        }
+
+        function CreateNotification(Title, Description) {
+            notificationModalTitle.textContent = Title;
+            notificationModalDescription.textContent = Description;
+            OpenModal("notificationModal");
+        }
+
+
+        let SelectedPlan = "pro";
+        function SelectPlan(selfthis) {
+            invoiceUserCount.textContent = selfthis.value == "pro" ? "1,500" : "20,000";
+            invoiceProjectCount.textContent = selfthis.value == "pro" ? "20" : "100";
+            amountPlanPerMonth.textContent = selfthis.value == "pro" ? "$7.45/pm" : "$13.45/pm";
+            paymentInvoiceAmount.textContent = `$${((selfthis.value == "pro" ? 7.45 : 13.45) * +upgradeSubscriptionAmountMonths.value).toFixed(2)}`
+            SelectedPlan = selfthis.value;
+        }
+
+        function SubscriptionInvoiceAmountUpdate(sss) {
+            paymentInvoiceAmount.textContent = `$${((SelectedPlan == "pro" ? 7.45 : 13.45) * +sss.value).toFixed(2)}`
+        }
+
+        async function invoiceCreateSubscription(selfthis) {
+            let amount = upgradeSubscriptionAmountMonths.value;
+            amount = amount.replace(",", "");
+            amount = +amount;
+
+            if (amount < 1) {
+                upgradeSubscriptionAmountMonths.error = "Minimum 1";
+                return;
+            } else {
+                upgradeSubscriptionAmountMonths.error = "";
+            }
+            
+            selfthis.loading = true;
+
+            const packet = await fetch("/api/billing/subscription/invoice", {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    months: amount,
+                    plan: SelectedPlan
+                })
+            });
+
+            if (packet.status !== 200) {
+                selfthis.loading = false;
+                return CreateNotification("Failed to create Invoice", "There was a problem creating this invoice, try again later?");
+            }
+
+            const body = await packet.json();
+            selfthis.loading = false;
+            cryptoInvoiceIFrame.src = `https://nowpayments.io/embeds/payment-widget?iid=${body.id}`;
+            OpenModal("cryptoInvoiceWidget");
+        }
+    
+        async function stripeInvoiceCreateSubscription(selfthis) {
+            let amount = upgradeSubscriptionAmountMonths.value;
+            amount = amount.replace(",", "");
+            amount = +amount;
+
+            if (amount < 1) {
+                upgradeSubscriptionAmountMonths.error = "Minimum 1";
+                return;
+            } else {
+                upgradeSubscriptionAmountMonths.error = "";
+            }
+
+            selfthis.loading = true;
+
+            const packet = await fetch("/api/billing/subscription/stripe/checkout", {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    months: amount,
+                    plan: SelectedPlan
+                })
+            });
+
+            if (packet.status !== 200) {
+                selfthis.loading = false;
+                return CreateNotification("Failed to create Invoice", "There was a problem creating this invoice, try again later?");
+            }
+
+            const { client_secret } = await packet.json();
+            const checkout = await stripe.initEmbeddedCheckout({
+                clientSecret: client_secret
+            });
+
+            checkout.mount("#stripeCheckoutDiv");
+            OpenModal("stripeCheckoutWidget");
+        }
+
+
+
+        stripeCheckoutWidget.addEventListener("cancel", event => event.preventDefault());
+        cryptoInvoiceWidget.addEventListener("cancel", event => event.preventDefault());
+
+        function CopyAPIKey() {
+            navigator.clipboard.writeText(`<%-authorization%>`);
+            CreateNotification("Success", "Copied to your Clipboard");
+        }
+
+        function AddBillingEntry(Invoice) {
+            const node = billingEntryProto.cloneNode(true);
+            node.children[0].textContent = Invoice.Type;
+            node.children[1].children[0].textContent = Invoice.Status;
+            node.children[2].textContent = `x${Invoice.Months} of SecureLua ${Invoice.Plan == "pro" ? "Pro" : "Advanced"} Plan`
+            node.children[3].textContent = `$${(+Invoice.Amount).toLocaleString()}`;
+            node.children[4].textContent = new Date(Invoice.Created).toLocaleString();
+            node.style.display = "";
+
+            if (Invoice.Status == "paid") {
+                node.children[1].children[0].variant = "success";
+            }
+
+            billingHistoryTable.appendChild(node);
+        }
+
+        (async () => {
+            const Packet = await fetch(`/api/user/<%-authorization%>`);
+            UserData = await Packet.json();
+
+            UserEmail.textContent = UserData.Email;
+            InvoiceEmail.textContent = UserData.Email;
+
+            if (UserData.SubscriptionEnd) {
+                const Expiry = new Date(UserData.SubscriptionEnd);
+                SubscriptionExpires.textContent = Expiry.toLocaleString();
+            } else {
+                SubscriptionExpires.textContent = "Never";
+            }
+
+            let IsPaid = (UserData.SubscriptionType == "pro" || UserData.SubscriptionType == "advanced");
+            let Formatted = !IsPaid ? "Free" : (UserData.SubscriptionType == "pro" ? "Pro" : "Advanced");
+
+            SubscriptionType.textContent = Formatted;
+            
+            if (IsPaid) {
+                ExtendSubscriptionTitle.textContent = "Extend Subscription";
+                UpgradeButton.textContent = "Extend";
+            }
+
+            updateAccountModalEmail.value = UserData.Email;
+
+            const BillingHistory = await fetch(`/api/billing/invoices`, {
+                method: "GET",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                }
+            });
+
+            const BillingHistoryBody = await BillingHistory.json();
+            if (Object.keys(BillingHistoryBody).length > 0) {
+                billingHistoryMain.style.display = "";
+                noBillingHistoryDiv.style.display = "none";
+            }
+
+            for (const Invoice of BillingHistoryBody) {
+                AddBillingEntry(Invoice);
+            }
+        })();
+    </script>
+</body>
+</html>

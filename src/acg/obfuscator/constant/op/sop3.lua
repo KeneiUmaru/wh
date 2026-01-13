@@ -1,0 +1,1 @@
+strByte = strByte - (strByte % 2 < 1 and (encKey3) or 0);

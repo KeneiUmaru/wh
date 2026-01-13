@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <title>Secure Lua | Dashboard</title>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.3.1/nord.min.css"  crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.19.0/index.js"crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.1.1/nord-dark.css" crossorigin="anonymous" />
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+</head>
+<body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-172W8028KH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-172W8028KH');
+    </script>
+    
+    <nord-layout>
+        <nord-navigation slot="nav">
+            <div slot="header">
+                <h1 class="n-typescale-l n-margin-is-l">Secure <no style="color: rgb(124, 172, 245);">Lua</no></h1>
+            </div>
+            <nord-nav-group heading="Your Account">
+                <nord-nav-item href="#" active icon="file-script">Projects</nord-nav-item>
+                <nord-nav-item href="/dashboard/rewards" icon="interface-star">Rewards</nord-nav-item>
+                <nord-nav-item href="/dashboard/upload" icon="file-code">Upload</nord-nav-item>
+                <nord-nav-item href="/dashboard/storage" icon="generic-storage">Server Storage</nord-nav-item>
+                <nord-nav-item href="/dashboard/documents" icon="interface-layers">Documentation</nord-nav-item>
+                <nord-nav-item href="/dashboard/settings" icon="navigation-settings">Settings</nord-nav-item>
+            </nord-nav-group>
+            <nord-nav-group heading="Support">
+                <nord-nav-item href="/dashboard/tickets" icon="generic-mail">Tickets</nord-nav-item>
+            </nord-nav-group>
+        </nord-navigation>
+
+        <nord-header slot="header">
+          <h1 class="n-typescale-l" id="welcomeBack">Welcome back, support@securelua.com</h1>
+          <nord-button variant="secondary" onclick="logout()" slot="end">
+            <nord-icon slot="start" name="interface-logout"></nord-icon>
+            Logout
+          </nord-button>
+        </nord-header>
+
+        <h1 class="n-typescale-xl n-margin-be-l">Global Statistics</h1>
+ 
+        <nord-stack gap="m" direction="horizontal">
+            <nord-card style="text-align: center;">
+                <h3 slot="" style="text-align: center;">Total Users</h3>
+                <dsf id="totalUsers">67,456</dsf>
+            </nord-card>
+            <nord-card style="text-align: center;">
+                <h3 slot="" style="text-align: center;">Total Executions</h3>
+                <dsf id="totalExecutions">35,674</dsf>
+            </nord-card>
+            <nord-card style="text-align: center;">
+                <h3 slot="" style="text-align: center;">Total Threats</h3>
+                <dsf id="totalThreats">10</dsf>
+            </nord-card>
+        </nord-stack>
+        
+        <h1 class="n-typescale-xl n-margin-bs-m" id="projectLabel">Your Projects <nord-button class="n-margin-bs-s n-margin-is-s" variant="" onclick="OpenModal('createProjectModal')" size="s"><nord-icon name="interface-add-small" slot="start"></nord-icon> Create Project</nord-button></h1>
+        <nord-stack gap="m" class="n-margin-bs-m" direction="vertical" id="projectStack">
+            <nord-card padding="m" id="projectProto" style="display: none;">
+                <h2 slot="header">Best Hub</h2>
+                <dl class="n-dl">
+                    <dt>Users</dt>
+                    <dd>43,245</dd>
+                    <dt>Executions</dt>
+                    <dd>35,674</dd>
+                </dl>                  
+                <div slot="footer">
+                    <nord-button onclick="OpenProject(this)" size="s">View Project</nord-button>
+                    <nord-button onclick="UpdateProject(this)" size="s">Update Project</nord-button>
+                </div>
+            </nord-card>
+        </nord-stack>
+
+        <nord-modal id="createProjectModal" size="s">
+            <h2 slot="header" id="title">Create Project</h2>
+            <nord-input id="createProjectName" expand label="Project Name" class="n-reset n-margin-be-m" hint="" type="text"></nord-input>
+            <nord-input id="createProjectWebhook" expand label="Discord Webhook" class="n-reset" hint="Log successful executions; malicous activity" type="text"></nord-input>
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button variant="primary" id="createProjectButton" onclick="CreateProject()">Create</nord-button>
+                <nord-button onclick="OpenModal('createProjectModal')">Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="updateProjectModal" size="s">
+            <h2 slot="header" id="title">Update Project</h2>
+            <nord-input id="updateProjectName" label="Project Name" class="n-reset n-margin-be-m" hint="" type="text"></nord-input>
+            <nord-input id="updateProjectWebhook" label="Discord Webhook" class="n-reset" hint="Log successful executions; malicous activity" type="text"></nord-input>
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button variant="primary" id="updateProjectButton" onclick="UpdateProjectInit()">Update</nord-button>
+                <nord-button onclick="OpenModal('updateProjectModal')">Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="notificationModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle">Purchase Successful</h2>
+                <p id="notificationModalDescription"></p>
+              </div>
+              <form method="dialog" slot="footer">
+                <nord-button expand variant="primary">Okay</nord-button>
+              </form>
+        </nord-modal>
+
+        <nord-modal id="paymentNeededModal" size="s">
+            <div class="n-reset n-typeset" style="text-align: center;">
+                <h2 id="paymentNeededModalTitle">You've reached your Project Limit</h2>
+                <p id="paymentNeededModalDesc">Upgrade your subscription to create more than one project</p>
+                <nord-button expand variant="primary"  href="/dashboard/settings?billing=true">Go to Billing</nord-button>
+              </div>
+        </nord-modal>
+
+        <nord-modal id="paymentModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle" style="text-align: center;">Payment Successful 🎉</h2>
+                <p id="notificationModalDescription" style="text-align: center;">Thank you for choosing Secure Lua!</p>
+              </div>
+              <nord-button class="n-margin-bs-s" onclick="OpenModal()" expand variant="primary">Okay</nord-button>
+        </nord-modal>
+    </nord-layout>
+
+    <script>
+        let UserData;
+
+        const WelcomeText = document.getElementById("welcomeBack");
+        const TotalUsers = document.getElementById("totalUsers");
+        const TotalExecutions = document.getElementById("totalExecutions");
+        const TotalThreats = document.getElementById("totalThreats");
+        const ProjectLabel = document.getElementById("projectLabel");
+
+        const ProjectStack = document.getElementById("projectStack");
+        const ProjectProto = document.getElementById("projectProto");
+
+        const notificationModalTitle = document.getElementById("notificationModalTitle");
+        const notificationModalDescription = document.getElementById("notificationModalDescription");
+
+        const createProjectButton = document.getElementById("createProjectButton");
+
+        const paymentNeededModalTitle = document.getElementById("paymentNeededModalTitle");
+        const paymentNeededModalDesc = document.getElementById("paymentNeededModalDesc");
+
+        const updateProjectName = document.getElementById("updateProjectName");
+        const updateProjectWebhook = document.getElementById("updateProjectWebhook");
+        const updateProjectButton = document.getElementById("updateProjectButton");
+
+        function logout() {
+            if (window.location.hostname === '127.0.0.1') {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            } else {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure; domain=securelua.com";
+            }
+            window.location.reload();
+        }
+
+        function OpenModal(id) {
+            const element = document.getElementById(id);
+            if (element.open) {
+                element.close();
+            } else {
+                element.showModal();
+            }
+        }
+
+        function PaymentNeeded(Title, Desc) {
+            paymentNeededModalTitle.textContent = Title;
+            paymentNeededModalDesc.textContent = Desc;
+            OpenModal('paymentNeededModal');
+        }
+
+        function CreateNotification(Title, Description) {
+            notificationModalTitle.textContent = Title;
+            notificationModalDescription.textContent = Description;
+            OpenModal("notificationModal");
+        }
+
+        function OpenProject(selfthis) {
+            const ID = selfthis.parentElement.parentElement.getAttribute("id");
+            window.location = `projects/${ID}/`;
+        }
+
+        function AddProject(id, Name, Users, Executions) {
+            const clone = ProjectProto.cloneNode(true);
+            clone.children[0].textContent = Name
+            clone.children[1].children[1].textContent = Users.toLocaleString();
+            clone.children[1].children[3].textContent = Executions.toLocaleString();
+            clone.style.display = "";
+            clone.setAttribute("id", id);
+            ProjectStack.appendChild(clone);
+        }
+        
+        function UpdateProject(selfthis) {
+            const ID = selfthis.parentElement.parentElement.getAttribute("id");
+            const Project = UserData.Projects.filter(p => p.id === ID).pop();
+
+            updateProjectName.value = Project.Name;
+            updateProjectWebhook.value = Project.Webhook;
+            updateProjectName.setAttribute("id", ID);
+
+            OpenModal("updateProjectModal");
+        }
+
+        async function UpdateProjectInit() {
+            const ID = updateProjectName.getAttribute("id");
+            updateProjectButton.loading = true;
+            updateProjectName.error = "";
+            updateProjectWebhook.error = "";
+
+            if (!updateProjectName.value.match(/^[\w'\-\!\s.\d]+$/)) {
+                updateProjectButton.loading = false;
+                updateProjectName.error = "Invalid name";
+                return;
+            }
+
+            if (!updateProjectWebhook.value.match(/^https:\/\/(canary\.)?discord(app)?.com\/api\/webhooks\/\d+\/[\w\d-]+$/)) {
+                updateProjectButton.loading = false;
+                updateProjectWebhook.error = "Invalid Webhook";
+                return;
+            }
+
+            const packet = await fetch(`/api/project/${ID}/`, {
+                method: "PATCH",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Name: updateProjectName.value,
+                    Webhook: updateProjectWebhook.value.trim()
+                })
+            });
+
+            if (packet.status == 402) {
+                updateProjectButton.loading = false;
+                return PaymentNeeded("Subscription Required", "You need a paid subscription to update this project")
+            }
+
+            if (packet.status !== 200) {
+                updateProjectButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to update project", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        async function CreateProject() {
+            const Name = document.getElementById("createProjectName");
+            const Webhook = document.getElementById("createProjectWebhook");
+
+            createProjectButton.loading = true;
+            Name.error = "";
+            Webhook.error = "";
+
+            if (!Name.value.match(/^[\w'\-\!\s.\d]+$/)) {
+                createProjectButton.loading = false;
+                Name.error = "Invalid name";
+                return;
+            }
+
+            if (!Webhook.value.match(/^https:\/\/(canary\.)?discord(app)?.com\/api\/webhooks\/\d+\/[\w\d-]+$/)) {
+                createProjectButton.loading = false;
+                Webhook.error = "Invalid Webhook";
+                return;
+            }
+
+            const packet = await fetch("/api/project/", {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Name: Name.value,
+                    Webhook: Webhook.value.trim()
+                })
+            });
+
+            if (packet.status == 402) {
+                createProjectButton.loading = false;
+                return PaymentNeeded("Subscription Required", "You need a paid subscription to create more than one project")
+            }
+
+            if (packet.status !== 200) {
+                createProjectButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to create project", `Reason: ${body.error}`);
+            }
+
+            if (packet.status === 200) {
+                window.location.reload();
+            }
+        }
+
+        (async () => {
+            const Packet = await fetch(`/api/user/<%-authorization%>`);
+            UserData = await Packet.json();
+
+            let _TotalUsers = 0;
+            let _TotalExecutions = 0;
+            let _TotalThreats = 0;
+
+            for (const { id, Name, UserCount, ExecutionCount, ThreatCount } of UserData.Projects) {
+                _TotalUsers += UserCount;
+                _TotalExecutions += ExecutionCount;
+                _TotalThreats += ThreatCount;
+                AddProject(id, Name, UserCount, ExecutionCount);
+            }
+
+            WelcomeText.textContent = `Welcome back, ${UserData.Email}`;
+            TotalUsers.textContent = _TotalUsers.toLocaleString();
+            TotalExecutions.textContent = _TotalExecutions.toLocaleString();
+            TotalThreats.textContent = _TotalThreats.toLocaleString();
+        })();
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const parmas = new URLSearchParams(window.location.search);
+            if (parmas.get("payment_success")) {
+                OpenModal("paymentModal");
+            }
+        });
+    </script>
+</body>
+</html>

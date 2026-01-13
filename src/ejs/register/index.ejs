@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.1.1/nord.min.css" integrity="sha384-zz2Vh/uaPtnKKnKq4a8aP/R7ybJEZD3LuwnvmLE+p42C+Zjr2R0Y+PKwdABWc61A" crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.8.0/index.js" integrity="sha384-zvZDBl7G/h/0UeesdZH1CBfL9kfoMi+5/I28m8u8yCgzJC7kohDH3I6XgaMzYnLW" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.0.1/nord-dark.css" integrity="sha384-4mfQkitA1YUssjHukrfVhopnhPw9eM2tX8Z05rZ/5NJRmDJN1fQp2gGfwydx2SzL" crossorigin="anonymous" />
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <title>Secure Lua | Register</title>
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+</head>
+<body>
+    <script>
+        (async () => {
+            const Existing = decodeURIComponent(document.cookie).split(";").find(x => x.startsWith("authorization"))
+            if (Existing) {
+                const Key = Existing.split("=").pop();
+                const packet = await fetch(`/api/user/${Key}`);
+                if (packet.status === 200) {
+                    window.location = "/dashboard/";
+                }
+            }
+        })();
+    </script>
+
+    <style>
+        body {
+            background: var(--n-color-surface);
+            margin: 0;
+        }
+
+        #info {
+            width: 65%;
+        }
+
+        nord-stack {
+            width: 50%;
+        }
+
+        .icon {
+            position: relative;
+            bottom: -3px;
+        }
+
+        .faq {
+            appearance: none;
+            box-sizing: border-box;
+            border: 0;
+        }
+
+        .yes {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: var(--n-space-xl);
+            padding-bottom: 15px;
+        }
+    </style>
+    
+    <style>
+        @media screen and (max-width: 600px) {
+            nord-stack, #info {
+                width: 80%;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+    
+    <nord-header>
+        <h1 class="n-typescale-l">Secure Lua</h1>
+        <img src="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto,h_50/mwgwjgjq0hhhy3nsobhc" alt="" srcset="">
+        <nord-button href="/" slot="end">Home</nord-button>
+    </nord-header>
+
+    <div class="yes">
+        <nord-stack style="max-inline-size: 340px;" direction="vertical">
+            <nord-card padding="m">
+                <h1 slot="header">Register to Secure Lua</h1>
+                <nord-input id="emailInput" expand label="Email" placeholder="user@domain.com" class="n-margin-be-m"></nord-input>
+                <nord-input id="passwordInput" expand label="Password" type="password" class="n-margin-be-m"></nord-input>
+                <nord-checkbox onchange="TosAgreed(this)" class="n-margin-be-m">
+                    <div slot="label">You agree to our <a href="/tos/">Terms of Service</a></div>
+                </nord-checkbox>
+                <nord-button disabled expand onclick="Login()" id="loginButton" variant="primary">Continue</nord-button>
+            </nord-card>
+            <nord-card padding="s" style="text-align: center;">
+                 <p class="n-typescale-s">Already have an account? <a href="/dashboard/login">Log-in</a>.</p>
+            </nord-card>
+        </nord-stack>
+    </div>
+
+    <nord-modal id="captchaModal" size="s" padding="s">
+        <h1 slot="header">Complete the captcha</h1>
+        <div class="cf-turnstile n-margin-be-s" data-size="flexible" data-sitekey="0x4AAAAAACMSUdPqkcd2sltR" data-callback="CaptchaCallback"></div>
+        <nord-button expand disabled onclick="LoginContinue()" id="loginContinueButton">Continue</nord-button>
+    </nord-modal>
+
+    <nord-divider direction="horizontal"></nord-divider>
+    
+    <nord-empty-state>
+        <nord-stack justify-content="center" direction="horizontal">
+            <a href="/tos/">Terms of Service</a>
+            <a href="/privacy/">Privacy Policy</a>
+            <a href="https://discord.gg/cSJwsDAtXx">Discord</a>
+         </nord-stack>
+    </nord-empty-state>    
+
+    <nord-modal id="notificationModal" size="s">
+        <div class="n-reset n-typeset">
+            <h2 id="notificationModalTitle"></h2>
+            <p id="notificationModalDescription"></p>
+          </div>
+          <form method="dialog" slot="footer">
+            <nord-button expand variant="primary">Okay</nord-button>
+          </form>
+    </nord-modal>
+
+    <script>
+        const LoginButton = document.getElementById("loginButton");
+        const Email = document.getElementById("emailInput");
+        const Password = document.getElementById("passwordInput");
+
+        const notificationModalTitle = document.getElementById("notificationModalTitle");
+        const notificationModalDescription = document.getElementById("notificationModalDescription");
+
+        function OpenModal(id) {
+            const element = document.getElementById(id);
+            if (element.open) {
+                element.close();
+            } else {
+                element.showModal();
+            }
+        }
+
+        function CreateNotification(Title, Description) {
+            notificationModalTitle.textContent = Title;
+            notificationModalDescription.textContent = Description;
+            OpenModal("notificationModal");
+        }
+
+        function Login() {
+            if (!emailInput.value.length) {
+                emailInput.error = "Email Required";
+            }
+
+            if (!passwordInput.value.length) {
+                passwordInput.error = "Password Required";
+            }
+
+            if (!emailInput.value.length || !passwordInput.value.length) {
+                return;
+            }
+
+            if (!emailInput.value.match(/^\S+@\S+\.\S+$/)) {
+                emailInput.error = "Invalid Email";
+                return;
+            }
+
+            if (passwordInput.value.length < 8) {
+                passwordInput.error = "Minimum 8 Characters";
+                return;
+            }
+
+            emailInput.error = "";
+            passwordInput.error = "";
+            
+            OpenModal("captchaModal");
+        }
+
+        function CaptchaCallback(ttoken) {
+            token = ttoken;
+            loginContinueButton.disabled = false;
+        }
+
+        function TosAgreed(selfthis) {
+            loginButton.disabled = !selfthis.checked;
+        }
+
+        async function LoginContinue() {
+            loginButton.loading = true;
+            OpenModal("captchaModal");
+
+            const packet = await fetch("/api/register", {
+                method: "POST",
+                headers: {
+                    ["authorization"]: token,
+                    ["content-type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Email: emailInput.value,
+                    Password: passwordInput.value
+                })
+            });
+
+            if (packet.status !== 200) {
+                loginButton.loading = false;
+                loginContinueButton.disabled = true;
+                turnstile.reset();
+
+                const { error } = await packet.json();
+                return CreateNotification("Registration Failure", `${error}`);
+            }
+
+            const body = await packet.json();
+            if (body.APIKey) {
+                if (window.location.hostname === "127.0.0.1") {
+                    document.cookie = `authorization=${body.APIKey}; path=/`;
+                } else {
+                    document.cookie = `authorization=${body.APIKey}; path=/; secure; domain=securelua.com`;
+                }
+                window.location = "/dashboard/";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <title>Secure Lua | Server Storage</title>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.2.1/nord.min.css" integrity="sha384-x2XdCI8Yog7KGRmrrGLegjFrrIYXEhGNxql/xEXdMoW5NkpEhlAkUHdQJxkL1vPg" crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.17.0/index.js" integrity="sha384-eme6DjBrFKzjO5DCscEfRDzjbMLA/MR4OcmSj48jogyZHps2ujPBo8+EdOZgEELg" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.0.1/nord-dark.css" integrity="sha384-4mfQkitA1YUssjHukrfVhopnhPw9eM2tX8Z05rZ/5NJRmDJN1fQp2gGfwydx2SzL" crossorigin="anonymous" />
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+</head>
+<body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-172W8028KH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-172W8028KH');
+    </script>
+    
+    <nord-layout>
+        <nord-navigation slot="nav">
+            <div slot="header">
+                <h1 class="n-typescale-l n-margin-is-l">Secure <no style="color: rgb(124, 172, 245);">Lua</no></h1>
+            </div>
+            <nord-nav-group heading="Your Account">
+                <nord-nav-item href="/dashboard/" icon="file-script">Projects</nord-nav-item>
+                <nord-nav-item href="/dashboard/rewards" icon="interface-star">Rewards</nord-nav-item>
+                <nord-nav-item href="/dashboard/upload" icon="file-code">Upload</nord-nav-item>
+                <nord-nav-item href="#" active icon="generic-storage">Server Storage</nord-nav-item>
+                <nord-nav-item href="/dashboard/documents" icon="interface-layers">Documentation</nord-nav-item>
+                <nord-nav-item href="/dashboard/settings" icon="navigation-settings">Settings</nord-nav-item>
+            </nord-nav-group>
+            <nord-nav-group heading="Support">
+                <nord-nav-item href="/dashboard/tickets" icon="generic-mail">Tickets</nord-nav-item>
+            </nord-nav-group>
+        </nord-navigation>
+
+        <nord-header slot="header">
+          <h1 class="n-typescale-l" id="welcomeBack">Server Storage</h1>
+          <nord-button variant="secondary" onclick="logout()" slot="end">
+            <nord-icon slot="start" name="interface-logout"></nord-icon>
+            Logout
+          </nord-button>
+        </nord-header>
+
+        <h1 class="n-typescale-xl n-margin-be-m">What is Server Storage?</h1>
+        <nord-stack gap="m" class="n-margin-bs-m" direction="vertical">
+            <nord-card>
+                <p class="n-reset">Server Storage allows you to easily share and access persistent data between your scripts. By indexing the AUTH_STORAGE variable with a key, you can effortlessly retrieve the corresponding value, streamlining data management and integration.</p>
+            </nord-card>
+        </nord-stack>
+        
+        <nord-button class="n-margin-bs-s" size="s" onclick="OpenModal('createRecordModal')"><nord-icon name="interface-add-small" slot="start"></nord-icon>Create Record</nord-button>
+        <nord-table class="n-margin-bs-l">
+            <table id="storageTable">
+              <thead>
+                <tr>
+                  <th class="">Key</th>
+                  <th>Value</th>
+                  <th class="n-table-align-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="storageEntry" style="display: none;">
+                  <td class="n-caption">dsf=cute</td>
+                  <td class="n-caption">xD4£fasf</td>
+                  <td class="n-table-align-right">
+                    <nord-button size="s" onclick="ManageEntry(this)">Update</nord-button>
+                    <nord-button size="s" id="deleteEntryButton" variant="danger" onclick="DeleteEntry(this)">Delete</nord-button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </nord-table>
+
+        <nord-modal id="createRecordModal" size="s">
+            <h2 slot="header" id="title" class="n-margin-be-s">New Record</h2>
+            
+            <nord-input label="Key" id="recordName" type="text" class="n-margin-be-m"></nord-input>
+            <nord-input label="Value" id="recordValue" type="text" class="n-margin-be-m"></nord-input>
+
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button variant="primary" id="createRecordButton" onclick="CreateRecord()">Update</nord-button>
+                <nord-button onclick="OpenModal('createRecordModal')">Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="notificationModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle">Purchase Successful</h2>
+                <p id="notificationModalDescription"></p>
+              </div>
+              <form method="dialog" slot="footer">
+                <nord-button expand variant="primary">Okay</nord-button>
+              </form>
+        </nord-modal>
+
+        <nord-modal id="paymentNeededModal" size="s">
+            <div class="n-reset n-typeset" style="text-align: center;">
+                <h2 id="paymentNeededModalTitle">You've reached your Script Limit</h2>
+                <p id="paymentNeededModalDesc">Upgrade your subscription to upload more than one script</p>
+                <nord-button expand variant="primary"  href="/dashboard/settings?billing=true">Go to Billing</nord-button>
+              </div>
+        </nord-modal>
+    </nord-layout>
+
+    <script>
+        const storageTable = document.getElementById("storageTable");
+        const storageEntry = document.getElementById("storageEntry");
+        const recordName = document.getElementById("recordName");
+        const recordValue = document.getElementById("recordValue");
+        const createRecordButton = document.getElementById("createRecordButton");
+
+        const notificationModalTitle = document.getElementById("notificationModalTitle");
+        const notificationModalDescription = document.getElementById("notificationModalDescription");
+
+        const paymentNeededModalTitle = document.getElementById("paymentNeededModalTitle");
+        const paymentNeededModalDesc = document.getElementById("paymentNeededModalDesc");
+
+        const deleteEntryButton = document.getElementById("deleteEntryButton");
+        
+        function logout() {
+            if (window.location.hostname === '127.0.0.1') {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            } else {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure; domain=securelua.com";
+            }
+            window.location.reload();
+        }
+
+        function OpenModal(id) {
+            const element = document.getElementById(id);
+            if (element.open) {
+                element.close();
+            } else {
+                element.showModal();
+            }
+        }
+
+        function ManageEntry(self) {
+            const node = self.parentNode.parentNode;
+            recordName.value = node.children[0].textContent;
+            recordValue.value = node.children[1].textContent;
+            OpenModal("createRecordModal");
+        }
+
+        async function DeleteEntry(self) {
+            deleteEntryButton.loading = true;
+
+            const node = self.parentNode.parentNode;
+            const Key = node.children[0].textContent;
+
+            const packet = await fetch(`/api/storage/`, {
+                method: "DELETE",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Key,
+                })
+            });
+
+            if (packet.status == 402) {
+                deleteEntryButton.loading = false;
+                return PaymentNeeded("Subscription Required", "You need a paid subscription to delete a record");
+            }
+
+            if (packet.status !== 200) {
+                deleteEntryButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to delete record", `Reason: ${body.error}`);
+            }
+
+            window.location.reload();
+        }
+
+        function PaymentNeeded(Title, Desc) {
+            paymentNeededModalTitle.textContent = Title;
+            paymentNeededModalDesc.textContent = Desc;
+            OpenModal("paymentNeededModal");
+        }
+
+        function CreateNotification(Title, Description) {
+            notificationModalTitle.textContent = Title;
+            notificationModalDescription.textContent = Description;
+            OpenModal("notificationModal");
+        }
+
+        async function CreateRecord() {
+            createRecordButton.loading = true;
+            recordName.error = "";
+            recordValue.error = "";
+
+            if (!recordName.value) {
+                recordName.error = "Cannot be empty";
+                createRecordButton.loading = false;
+                return;
+            }
+
+            if (!recordValue.value) {
+                recordValue.error = "Cannot be empty";
+                createRecordButton.loading = false;
+                return;
+            }
+
+            if (recordName.value.length > 100) {
+                recordName.error = "Maximum length of 100";
+                createRecordButton.loading = false;
+                return;
+            }
+
+            if (recordValue.value.length > 100) {
+                recordValue.error = "Maximum length of 100";
+                createRecordButton.loading = false;
+                return;
+            }
+
+            const packet = await fetch(`/api/storage/`, {
+                method: "POST",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>",
+                    ["Content-Type"]: "application/json"
+                },
+                body: JSON.stringify({
+                    Key: recordName.value,
+                    Value: recordValue.value
+                })
+            });
+
+            if (packet.status == 402) {
+                createRecordButton.loading = false;
+                return PaymentNeeded("Subscription Required", "You need a paid subscription to create a record");
+            }
+
+            if (packet.status !== 200) {
+                createRecordButton.loading = false;
+                const body = await packet.json();
+                return CreateNotification("Failed to create record", `Reason: ${body.error}`);
+            }
+
+            window.location.reload();
+        }
+
+        function AddEntry(Key, Value) {
+            const clone = storageEntry.cloneNode(true);
+            clone.children[0].textContent = Key;
+            clone.children[1].textContent = Value;
+            clone.style.display = "";
+            storageTable.appendChild(clone);
+        }
+
+        (async () => {
+            const Packet = await fetch(`/api/storage/`, {
+                method: "GET",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>"
+                }
+            });
+            
+            const StorageData = await Packet.json();
+            for (const [Key, Value] of Object.entries(StorageData)) {
+                AddEntry(Key, Value);
+            }
+        })();
+    </script>
+</body>
+</html>

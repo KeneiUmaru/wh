@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model License {
+  id              String   @id @default(uuid()) @map("_id")
+  Key             String   @unique
+  HWID            String?  @unique
+  ProjectID       String   @unique
+  Executions      Int      @default(0)
+  Blacklisted     Boolean  @default(false)
+  BlacklistReason String?
+  CreatedAt       DateTime @default(now())
+  ExpireAt        Int?
+  DiscordID       String?
+}
+
+model Project {
+  id             String   @id @default(uuid()) @map("_id")
+  ExecutionCount Int      @default(0)
+  UserCount      Int      @default(0)
+  ThreatCount    Int      @default(0)
+  Name           String
+  Webhook        String
+  Enabled        Boolean  @default(true)
+  APIKey         String   @unique
+  LoaderHash     String
+  LoaderCreated  DateTime @default(now())
+  LoaderVersion  String?
+  LoaderConfig   Json?
+}
+
+model User {
+  id                  String    @id @default(uuid()) @map("_id")
+  Email               String    @unique
+  Password            String    @unique
+  APIKey              String    @unique
+  Admin               Boolean   @default(false)
+  RegisteredAt        DateTime  @default(now())
+  SubscriptionType    String    @default("free")
+  SubscriptionEnd     DateTime?
+  SubscriptionCreated DateTime  @default(now())
+  ServerStorage       Json?
+}
+
+model Reward {
+  id                String   @id @default(uuid()) @map("_id")
+  ConnectedProject  String   @unique
+  Name              String
+  URLs              String[]
+  Webhook           String
+  AntiBypassToken   String
+  Uses              Int      @default(0)
+  AttemptedBypasses Int      @default(0)
+  RewardLength      Int
+  APIKey            String
+  Publisher         String   @default("linkvertise")
+}
+
+model Script {
+  id        String  @id @default(uuid()) @map("_id")
+  Name      String
+  APIKey    String  @unique
+  Downloads Int     @default(0)
+  Roblox    Boolean @default(false)
+}
+
+model Ticket {
+  id      String   @id @default(uuid()) @map("_id")
+  Name    String
+  APIKey  String   @unique
+  Status  String   @default("Unclaimed")
+  Created DateTime @default(now())
+}
+
+model Invoice {
+  id            String   @id @default(uuid()) @map("_id")
+  OrderID       String   @unique
+  OwnerID       String   @unique
+  Months        Int
+  Plan          String
+  Type          String
+  Amount        String
+  Created       DateTime @default(now())
+  Status        String   @default("waiting")
+}
+
+model Serial {
+  id     String @id @default(uuid()) @map("_id")
+  Months Int
+  Serial String @unique
+}

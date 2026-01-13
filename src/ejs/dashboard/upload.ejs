@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/mwgwjgjq0hhhy3nsobhc">
+    <title>Secure Lua | Script Upload</title>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/css/3.3.1/nord.min.css"  crossorigin="anonymous" />
+    <script type="module" src="https://nordcdn.net/ds/components/3.19.0/index.js"crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://nordcdn.net/ds/themes/8.1.1/nord-dark.css" crossorigin="anonymous" />
+    <meta name="description" content="Secure, fast Secure Whitelisting Service for Roblox. Protect your scripts with real-time threat analytics and lightning-fast performance, no source code required!">
+    <meta property="og:image" content="https://res.cloudinary.com/dlxrsqy04/image/upload/f_auto,q_auto/m4zzoe6aae6lyjgfqy6v" />
+</head>
+<body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-172W8028KH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-172W8028KH');
+    </script>
+    
+    <nord-layout>
+        <nord-navigation slot="nav">
+            <div slot="header">
+                <h1 class="n-typescale-l n-margin-is-l">Secure <no style="color: rgb(124, 172, 245);">Lua</no></h1>
+            </div>
+            <nord-nav-group heading="Your Account">
+                <nord-nav-item href="/dashboard/" icon="file-script">Projects</nord-nav-item>
+                <nord-nav-item href="/dashboard/rewards" icon="interface-star">Rewards</nord-nav-item>
+                <nord-nav-item href="#" active icon="file-code">Upload</nord-nav-item>
+                <nord-nav-item href="/dashboard/storage" icon="generic-storage">Server Storage</nord-nav-item>
+                <nord-nav-item href="/dashboard/documents" icon="interface-layers">Documentation</nord-nav-item>
+                <nord-nav-item href="/dashboard/settings" icon="navigation-settings">Settings</nord-nav-item>
+            </nord-nav-group>
+            <nord-nav-group heading="Support">
+                <nord-nav-item href="/dashboard/tickets" icon="generic-mail">Tickets</nord-nav-item>
+            </nord-nav-group>
+        </nord-navigation>
+
+        <nord-header slot="header">
+          <h1 class="n-typescale-l" id="welcomeBack">Script Upload</h1>
+          <nord-button variant="secondary" onclick="logout()" slot="end">
+            <nord-icon slot="start" name="interface-logout"></nord-icon>
+            Logout
+          </nord-button>
+        </nord-header>
+
+        <h1 class="n-typescale-xl n-margin-be-m">What is Script Upload?</h1>
+        <nord-stack gap="m" class="n-margin-bs-m" direction="vertical">
+            <nord-card>
+                <p class="n-reset">Script Upload enables you to easily host and share your scripts on securelua.com, providing a seamless platform for managing and accessing your code.</p>
+            </nord-card>
+        </nord-stack>
+        
+        <h1 class="n-typescale-xl n-margin-bs-m" id="projectLabel">Your Scripts <nord-button class="n-margin-bs-s n-margin-is-s" onclick="OpenModal('createScriptModal')" size="s"><nord-icon name="interface-add-small" slot="start"></nord-icon>Upload</nord-button></h1>
+        <nord-stack gap="m" class="n-margin-bs-m" direction="vertical" id="scriptStack">
+            <nord-card padding="m" id="scriptProto" style="display: none;">
+                <p class="n-reset n-margin-be-s">Best Hub</p>
+                <dl class="n-dl">
+                    <dt>Downloads</dt>
+                    <dd>43,245</dd>
+                </dl>
+
+                <nord-button-group variant="spaced">
+                    <nord-button class="n-margin-bs-s" size="s" variant="dashed">
+                        Copy URL
+                        <nord-icon name="interface-copy" slot="end"></nord-icon>
+                    </nord-button>
+                    <nord-button class="n-margin-bs-s" size="s" variant="dashed">
+                        Copy Loadstring
+                        <nord-icon name="interface-copy" slot="end"></nord-icon>
+                    </nord-button>
+                </nord-button-group>
+                <nord-button-group variant="spaced">
+                    <nord-button class="n-margin-bs-s" size="s">
+                        Update
+                        <nord-icon name="interface-edit-2" slot="end"></nord-icon>
+                    </nord-button>
+                    <nord-button class="n-margin-bs-s" size="s" variant="danger">
+                        Delete
+                        <nord-icon name="interface-delete" slot="end"></nord-icon>
+                    </nord-button>
+                </nord-button-group>
+            </nord-card>
+        </nord-stack>
+
+        <nord-modal id="createScriptModal" size="s">
+            <h2 slot="header" id="title" class="n-margin-be-s">Upload Script</h2>
+
+            <nord-input label="Script Name" hint="Hidden from Users" required id="fileName" type="text" class="n-margin-be-m" expand></nord-input>
+            <input label="Choose File" onchange="FileSelected()" id="fileInput" type="file" accept=".lua, .txt, .luau" hint="Text only, Maximum 2MB"></input><br>
+            <nord-checkbox id="robloxOnly" label="Roblox Only" hint="Hide Your Script from Browser View" value="false" class="n-margin-bs-m"></nord-checkbox>
+
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button variant="primary" id="createScriptButton" onclick="UploadScript()">Upload</nord-button>
+                <nord-button onclick="OpenModal('createScriptModal')">Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="updateScriptModal" size="s">
+            <h2 slot="header" id="title" class="n-margin-be-s">Update Script</h2>
+            
+            <nord-input label="Script Name" id="updateScriptName" type="text" class="n-margin-be-m" expand></nord-input>
+            <input label="Choose File" onchange="FileSelectedUpdate()" id="fileInputUpdate" type="file" accept=".lua, .txt, .luau" hint="Text only, Maximum 2MB"></input><br>
+            <nord-checkbox id="updateRobloxOnly" label="Roblox Only" hint="Hide Your Script from Browser View" value="false" class="n-margin-bs-m"></nord-checkbox>
+
+            <nord-button-group slot="footer" variant="spaced">
+                <nord-button variant="primary" id="updateScriptButton" onclick="UpdateScript()">Update</nord-button>
+                <nord-button onclick="OpenModal('updateScriptModal')">Cancel</nord-button>
+            </nord-button-group>
+        </nord-modal>
+
+        <nord-modal id="notificationModal" size="s">
+            <div class="n-reset n-typeset">
+                <h2 id="notificationModalTitle">Purchase Successful</h2>
+                <p id="notificationModalDescription"></p>
+              </div>
+              <form method="dialog" slot="footer">
+                <nord-button expand variant="primary">Okay</nord-button>
+              </form>
+        </nord-modal>
+
+        <nord-modal id="paymentNeededModal" size="s">
+            <div class="n-reset n-typeset" style="text-align: center;">
+                <h2 id="paymentNeededModalTitle">You've reached your Script Limit</h2>
+                <p id="paymentNeededModalDesc">Upgrade your subscription to upload more than one script</p>
+                <nord-button expand variant="primary"  href="/dashboard/settings?billing=true">Go to Billing</nord-button>
+              </div>
+        </nord-modal>
+    </nord-layout>
+
+    <script>
+        const fileUploadButton = document.getElementById("createScriptButton")
+        const fileInput = document.getElementById("fileInput");
+        const fileName = document.getElementById("fileName");
+        const robloxOnly = document.getElementById("robloxOnly");
+
+        const scriptProto = document.getElementById("scriptProto");
+        const scriptStack = document.getElementById("scriptStack");
+
+        const notificationModalTitle = document.getElementById("notificationModalTitle");
+        const notificationModalDescription = document.getElementById("notificationModalDescription");
+
+        const paymentNeededModalTitle = document.getElementById("paymentNeededModalTitle");
+        const paymentNeededModalDesc = document.getElementById("paymentNeededModalDesc");
+
+        const fileInputUpdate = document.getElementById("fileInputUpdate");
+        const updateScriptName = document.getElementById("updateScriptName");
+        const updateScriptButton = document.getElementById("updateScriptButton");
+        const updateRobloxOnly = document.getElementById("updateRobloxOnly");
+        
+        function FileSelected(self) {
+            const file = fileInput.files[0];
+            if (file.size > 2000000) {
+                fileInput.value = null;
+                return CreateNotification("Too Large", "We only accept files under 2MB");
+            }
+        }
+
+        function FileSelectedUpdate(self) {
+            const file = fileInputUpdate.files[0];
+            if (file.size > 2000000) {
+                fileInput.value = null;
+                return CreateNotification("Too Large", "We only accept files under 2MB");
+            }
+        }
+
+        function UploadScript() {
+            fileUploadButton.loading = true;
+
+            if (!fileName.value || !fileName.value.length) {
+                fileUploadButton.loading = false;
+                fileName.error = "Please provide a name";
+                return;    
+            }
+
+            const file = fileInput.files[0];
+            const Reader = new FileReader()
+            Reader.onload = async () => {
+                const FileContent = Reader.result;
+
+                const packet = await fetch(`/api/script/`, {
+                    method: "POST",
+                    headers: {
+                        ["Authorization"]: "<%-authorization%>",
+                        ["Content-Type"]: "application/json"
+                    },
+                    body: JSON.stringify({
+                        Name: fileName.value,
+                        Content: FileContent,
+                        Roblox: robloxOnly.checked
+                    })
+                });
+
+                if (packet.status == 402) {
+                    fileUploadButton.loading = false;
+                    return PaymentNeeded("Subscription Required", "You need a paid subscription to upload a script");
+                }
+
+                if (packet.status !== 200) {
+                    fileUploadButton.loading = false;
+                    const body = await packet.json();
+                    return CreateNotification("Failed to upload script", `Reason: ${body.error}`);
+                }
+
+                if (packet.status === 200) {
+                    window.location.reload();
+                }
+            } 
+            Reader.readAsText(file, "utf-8");
+        }
+
+        function UpdateScript() {
+            updateScriptButton.loading = true;
+
+            const ID = updateScriptName.getAttribute("id");
+            const file = fileInputUpdate.files[0];
+            const Reader = new FileReader()
+
+            Reader.onload = async () => {
+                const FileContent = Reader.result;
+
+                const packet = await fetch(`/api/script/${ID}/`, {
+                    method: "PATCH",
+                    headers: {
+                        ["Authorization"]: "<%-authorization%>",
+                        ["Content-Type"]: "application/json"
+                    },
+                    body: JSON.stringify({
+                        Name: updateScriptName.value,
+                        Content: FileContent,
+                        Roblox: updateRobloxOnly.checked
+                    })
+                });
+
+                if (packet.status == 402) {
+                    fileUploadButton.loading = false;
+                    return PaymentNeeded("Subscription Required", "You need a paid subscription to update a script");
+                }
+
+                if (packet.status !== 200) {
+                    fileUploadButton.loading = false;
+                    const body = await packet.json();
+                    return CreateNotification("Failed to update script", `Reason: ${body.error}`);
+                }
+
+                if (packet.status === 200) {
+                    window.location.reload();
+                }
+            } 
+            Reader.readAsText(file, "utf-8");
+        }
+
+        function logout() {
+            if (window.location.hostname === '127.0.0.1') {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+            } else {
+                document.cookie = "authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure; domain=securelua.com";
+            }
+            window.location.reload();
+        }
+
+        function OpenModal(id) {
+            const element = document.getElementById(id);
+            if (element.open) {
+                element.close();
+            } else {
+                element.showModal();
+            }
+        }
+
+        function PaymentNeeded(Title, Desc) {
+            paymentNeededModalTitle.textContent = Title;
+            paymentNeededModalDesc.textContent = Desc;
+            OpenModal('paymentNeededModal');
+        }
+
+        function CreateNotification(Title, Description) {
+            notificationModalTitle.textContent = Title;
+            notificationModalDescription.textContent = Description;
+            OpenModal("notificationModal");
+        }
+
+        function AddScriptToList(Title, Downloads, ID, Roblox) {
+            const clone = scriptProto.cloneNode(true);
+
+            console.log(Roblox);
+            
+            console.log(clone.children);
+            clone.children[0].textContent = Title;
+            clone.children[1].children[1].textContent = Downloads.toLocaleString();
+
+            clone.children[2].children[0].onclick = function() {
+                navigator.clipboard.writeText(`https://securelua.com/scripts/${ID}`);
+                CreateNotification("Success", "Copied URL. You can now share this with users");
+            }
+
+            clone.children[2].children[1].onclick = function() {
+                navigator.clipboard.writeText(`loadstring(game:HttpGet("https://securelua.com/scripts/${ID}"))()`);
+                CreateNotification("Success", "Copied Loadstring. You can now share this with users");
+            }
+
+            clone.children[3].children[0].onclick = function() {
+                updateScriptName.value = Title;
+                updateRobloxOnly.checked = Roblox;
+                updateScriptName.setAttribute("id", ID);
+                OpenModal('updateScriptModal');
+            }
+
+            clone.children[3].children[1].onclick = async function() {
+                const packet = await fetch(`/api/script/${ID}/`, {
+                    method: "DELETE",
+                    headers: {
+                        ["Authorization"]: "<%-authorization%>",
+                    }
+                });
+                window.location.reload();
+            }
+            
+            clone.style.display = "";
+            scriptStack.appendChild(clone);
+        }
+
+        (async () => {
+            const Packet = await fetch(`/api/script/`, {
+                method: "GET",
+                headers: {
+                    ["Authorization"]: "<%-authorization%>"
+                }
+            });
+            const ScriptData = await Packet.json();
+
+            let _TotalUses = 0;
+            let _TotalThreats = 0;
+            for (const { Name, id, Downloads, Roblox } of ScriptData) {
+                AddScriptToList(Name, Downloads, id, Roblox);
+            }
+        })();
+    </script>
+</body>
+</html>
