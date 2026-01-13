@@ -11,7 +11,7 @@ const VirtualTokens = new Set();
  * @param {import("fastify").FastifyInstance} fastify  Encapsulated Fastify Instance
  * @param {Object} options plugin options, refer to https://www.fastify.io/docs/latest/Reference/Plugins/#plugin-options
 */
-async function routes(fastify, options) {	
+async function routes(fastify, options) {
     fastify.get("/", { schema: { querystring: schemas.RewardRedeemQuerySchema } }, async (request, reply) => {
         const { id, hash } = request.query;
         const Reward = await Database.GetReward(id); // PROJECT ID
